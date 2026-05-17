@@ -26,7 +26,18 @@ const PROJECTS = [
   { id:"01", title:"The Enfolding",         subtitle:"Corita Kent Art Center",
     type:"Art foundation building",   year:"Spring 2024", tag:"Individual",       location:"Boyle Heights, Los Angeles", hasFacade:true,  facadePages:[0,5],
     brief:"A folded architectural skin wraps the art center, filtering light and creating a gradient of enclosure from public plaza to intimate gallery. The envelope responds to the existing urban fabric while establishing a distinct institutional presence.",
-    images:Array(10).fill(null),
+    images:[
+  "/images/01/1.png",
+  "/images/01/2.png",
+  "/images/01/3.png",
+  "/images/01/4.png",
+  "/images/01/5.png",
+  "/images/01/6.png",
+  "/images/01/7.png",
+  "/images/01/8.png",
+  "/images/01/9.png",
+  "/images/01/10.png",
+],
     captions:["","Site analysis, Boyle Heights, Los Angeles.",
       "Program distribution across folded levels.",
       "Structural logic of the envelope.",
@@ -283,7 +294,7 @@ function ProjectIndexItem({ project, isCurrent, onSwitch }) {
           ? "translateY(-50%) translateX(0)"
           : "translateY(-50%) translateX(-6px)",
         transition:"opacity .2s ease, transform .2s ease",
-        background:C.surface,
+        background:"#141310",
         border:`1px solid ${C.border}`,
         padding:"0.55rem 0.85rem",
         whiteSpace:"nowrap",
@@ -596,8 +607,11 @@ function Home({ onNavigate }) {
     <div style={{ opacity:vis?1:0, transform:vis?"none":"translateY(14px)",
       transition:"opacity .7s ease, transform .7s ease" }}>
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column",
-        justifyContent:"center", padding:"clamp(1.5rem,4vw,3rem)",
-        paddingTop:"clamp(80px,12vh,120px)", paddingBottom:"clamp(1.5rem,4vw,3rem)" }}>
+        padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
+
+        {/* Upper half — logo + title + description, vertically centered */}
+        <div style={{ flex:1, display:"flex", flexDirection:"column",
+          justifyContent:"center", paddingTop:80 }}>
 
         {/*
           ── Logo image placeholder ──
@@ -638,36 +652,40 @@ function Home({ onNavigate }) {
           color:C.textDim, lineHeight:1.8 }}>
           Architectural design, facade research, and spatial photography.
         </p>
+        </div>
 
-        <div style={{ height:"clamp(2.8rem,7vh,5rem)" }}/>
-        <Rule/>
-        <div style={{ height:"clamp(2rem,5vh,3.5rem)" }}/>
+        {/* Lower section — rule + nav, pinned to bottom */}
+        <div style={{ paddingBottom:"clamp(3rem,7vh,5rem)" }}>
+          <div style={{ height:"clamp(1rem,2.5vh,2rem)" }}/>
+          <Rule/>
+          <div style={{ height:"clamp(2rem,5vh,3.5rem)" }}/>
 
-        <nav style={{ display:"grid",
-          gridTemplateColumns:"repeat(auto-fit, minmax(160px,1fr))",
-          gap:"clamp(0.5rem,2vw,1.5rem)" }}>
-          {NAV.map((item,i)=>{
-            const [hov,setHov] = useState(false);
-            return (
-              <button key={item} onClick={()=>onNavigate(item)}
-                onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-                style={{ background:"none", border:"none", cursor:"pointer", textAlign:"left",
-                  padding:"0.9rem 0",
-                  borderTop:`1px solid ${hov ? C.gold : C.border}`,
-                  transition:"border-color .3s" }}>
-                <span style={{ fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.22em",
-                  textTransform:"uppercase", color:C.gold, display:"block", marginBottom:"0.35rem" }}>
-                  0{i+1}
-                </span>
-                <span style={{ fontFamily:F.display, fontSize:"1.05rem",
-                  fontWeight:300, color:C.text }}>
-                  {item}
-                </span>
-              </button>
-            );
-          })}
-        </nav>
-        <div style={{ height:"clamp(0.75rem,2vh,1.5rem)" }}/>
+          <nav style={{ display:"grid",
+            gridTemplateColumns:"repeat(auto-fit, minmax(160px,1fr))",
+            gap:"clamp(0.5rem,2vw,1.5rem)" }}>
+            {NAV.map((item,i)=>{
+              const [hov,setHov] = useState(false);
+              return (
+                <button key={item} onClick={()=>onNavigate(item)}
+                  onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
+                  style={{ background:"none", border:"none", cursor:"pointer", textAlign:"left",
+                    padding:"0.9rem 0",
+                    borderTop:`1px solid ${hov ? C.gold : C.border}`,
+                    transition:"border-color .3s" }}>
+                  <span style={{ fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.22em",
+                    textTransform:"uppercase", color:C.gold, display:"block", marginBottom:"0.35rem" }}>
+                    0{i+1}
+                  </span>
+                  <span style={{ fontFamily:F.display, fontSize:"1.05rem",
+                    fontWeight:300, color:C.text }}>
+                    {item}
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+          <div style={{ height:"clamp(0.75rem,2vh,1.5rem)" }}/>
+        </div>
       </div>
     </div>
   );
@@ -1007,7 +1025,8 @@ export default function App() {
   return (
     <>
       <style>{FONT_IMPORT}</style>
-      <div style={{ minHeight:"100vh", background:C.bg,
+      <div style={{ minHeight:"100vh",
+        background:"linear-gradient(180deg, #080807 0%, #0d0d0d 30%, #131313 60%, #1a1a1a 82%, #242424 100%)",
         opacity:mounted?1:0, transition:"opacity .5s ease" }}>
         <Grain/>
         <NavBar currentPage={page} currentProject={project}
