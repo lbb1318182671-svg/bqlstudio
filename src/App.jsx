@@ -232,15 +232,16 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
 
   return (
     // FIX 3: white background for project viewer
-    <div style={{ minHeight:"100vh", background:"#f5f4f1" }} {...swipe}>
+    <div style={{ minHeight:"100vh", background:C.bg }} {...swipe}>
 
       <ProjectIndexSidebar currentProject={project} onSwitchProject={onSwitchProject} top={TOP}/>
 
       {/* ── IMAGE AREA — all slides same layout ── */}
       <div style={{ marginLeft:SB, paddingTop:TOP, paddingBottom:BH,
-        minHeight:"100vh", display:"flex", alignItems:"flex-start",  // FIX 2: flex-start = images higher
+        minHeight:"100vh", display:"flex", alignItems:"flex-start",
         justifyContent:"center", position:"relative",
-        paddingTop:`calc(${TOP}px + 1rem)` }}>  {/* FIX 2: tighter top padding */}
+        background:"#ffffff",
+        paddingTop:`calc(${TOP}px + 1rem)` }}>
 
         <div style={{ width:"100%", display:"flex", alignItems:"center",
           justifyContent:"center",
@@ -282,70 +283,69 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
 
       {/* ── BOTTOM BAR ── */}
       <div style={{ position:"fixed", bottom:0, left:SB, right:0, zIndex:30,
-        background:"rgba(245,244,241,0.97)", backdropFilter:"blur(18px)",
-        borderTop:"1px solid rgba(0,0,0,0.1)",
+        background:"rgba(8,8,7,0.96)", backdropFilter:"blur(18px)",
+        borderTop:`1px solid ${C.border}`,
         padding:"0.5rem clamp(1.5rem,5vw,4rem) 0.8rem" }}>
 
         {/* Caption */}
         <p style={{ fontFamily:F.display, fontStyle:"italic",
           fontSize:"clamp(0.7rem,1.4vw,0.88rem)",
-          color:"rgba(0,0,0,0.45)", textAlign:"center", lineHeight:1.6,
+          color:C.textDim, textAlign:"center", lineHeight:1.6,
           marginBottom:"0.5rem", minHeight:"1.3em" }}>
           {project.captions[idx]||""}
         </p>
 
-        <div style={{ height:1, background:"rgba(0,0,0,0.1)", marginBottom:"0.5rem" }}/>
+        <Rule style={{ marginBottom:"0.5rem" }}/>
 
         {/* Controls row */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"0.5rem" }}>
           <button onClick={prevP?()=>onSwitchProject(prevP):undefined}
             style={{ background:"none", border:"none", cursor:prevP?"pointer":"default",
               fontFamily:F.ui, fontSize:"0.54rem", letterSpacing:"0.14em", textTransform:"uppercase",
-              color:prevP?"rgba(0,0,0,0.4)":"transparent", transition:"color .2s", whiteSpace:"nowrap", flexShrink:0 }}
+              color:prevP?C.textDim:"transparent", transition:"color .2s", whiteSpace:"nowrap", flexShrink:0 }}
             onMouseEnter={e=>{ if(prevP) e.currentTarget.style.color=C.gold; }}
-            onMouseLeave={e=>{ if(prevP) e.currentTarget.style.color="rgba(0,0,0,0.4)"; }}>
+            onMouseLeave={e=>{ if(prevP) e.currentTarget.style.color=C.textDim; }}>
             ← {prevP?`${prevP.id} ${prevP.title}`:""}
           </button>
 
           <div style={{ display:"flex", alignItems:"center", gap:"0.28rem", flexWrap:"wrap", justifyContent:"center" }}>
             <button onClick={prev} disabled={idx===0}
               style={{ background:"none",border:"none",cursor:idx===0?"default":"pointer",
-                fontFamily:F.ui, fontSize:"0.62rem", color:idx===0?"rgba(0,0,0,0.2)":"rgba(0,0,0,0.5)",
+                fontFamily:F.ui, fontSize:"0.62rem", color:idx===0?C.goldDim:C.textDim,
                 padding:"2px 5px", transition:"color .2s" }}>Prev</button>
             {project.images.map((_,i)=>(
               <button key={i} onClick={()=>setIdx(i)} style={{
                 background:i===idx?C.gold:"none",
-                border:`1px solid ${i===idx?C.gold:"rgba(196,166,110,0.4)"}`,
-                color:i===idx?"#fff":"rgba(0,0,0,0.5)",
+                border:`1px solid ${i===idx?C.gold:C.goldDim}`,
+                color:i===idx?C.bg:C.textDim,
                 fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.06em",
                 width:22, height:22, cursor:"pointer", transition:"all .2s" }}>{i+1}</button>
             ))}
             <button onClick={next} disabled={idx===total-1}
               style={{ background:"none",border:"none",cursor:idx===total-1?"default":"pointer",
-                fontFamily:F.ui, fontSize:"0.62rem", color:idx===total-1?"rgba(0,0,0,0.2)":"rgba(0,0,0,0.5)",
+                fontFamily:F.ui, fontSize:"0.62rem", color:idx===total-1?C.goldDim:C.textDim,
                 padding:"2px 5px", transition:"color .2s" }}>Next</button>
           </div>
 
           <button onClick={nextP?()=>onSwitchProject(nextP):undefined}
             style={{ background:"none", border:"none", cursor:nextP?"pointer":"default",
               fontFamily:F.ui, fontSize:"0.54rem", letterSpacing:"0.14em", textTransform:"uppercase",
-              color:nextP?"rgba(0,0,0,0.4)":"transparent", transition:"color .2s", whiteSpace:"nowrap", flexShrink:0 }}
+              color:nextP?C.textDim:"transparent", transition:"color .2s", whiteSpace:"nowrap", flexShrink:0 }}
             onMouseEnter={e=>{ if(nextP) e.currentTarget.style.color=C.gold; }}
-            onMouseLeave={e=>{ if(nextP) e.currentTarget.style.color="rgba(0,0,0,0.4)"; }}>
+            onMouseLeave={e=>{ if(nextP) e.currentTarget.style.color=C.textDim; }}>
             {nextP?`${nextP.id} ${nextP.title}`:""} →
           </button>
         </div>
 
-        {/* FIX 1: subtitle row with View Facade Detail button on the far right */}
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-          marginTop:"0.35rem" }}>
+        {/* subtitle row with View Facade Detail button on the far right */}
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:"0.35rem" }}>
           <div style={{ flex:1 }}/>
           <p style={{ fontFamily:F.display, fontSize:"clamp(0.62rem,1.2vw,0.76rem)",
-            color:"rgba(0,0,0,0.3)", textAlign:"center", letterSpacing:"0.04em", margin:0 }}>
+            color:"rgba(255,255,255,0.28)", textAlign:"center", letterSpacing:"0.04em", margin:0 }}>
             {project.subtitle}
-            <span style={{ color:"rgba(196,166,110,0.5)", margin:"0 0.45rem" }}>·</span>
+            <span style={{ color:C.goldDim, margin:"0 0.45rem" }}>·</span>
             {project.type}
-            <span style={{ color:"rgba(196,166,110,0.5)", margin:"0 0.45rem" }}>·</span>
+            <span style={{ color:C.goldDim, margin:"0 0.45rem" }}>·</span>
             {project.year}
           </p>
           <div style={{ flex:1, display:"flex", justifyContent:"flex-end" }}>
@@ -355,7 +355,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
                 color:C.gold, fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.16em",
                 textTransform:"uppercase", padding:"3px 12px", cursor:"pointer", transition:"all .2s",
                 display:"inline-flex", alignItems:"center", gap:"0.4rem" }}
-                onMouseEnter={e=>{ e.currentTarget.style.background=C.gold; e.currentTarget.style.color="#fff"; }}
+                onMouseEnter={e=>{ e.currentTarget.style.background=C.gold; e.currentTarget.style.color=C.bg; }}
                 onMouseLeave={e=>{ e.currentTarget.style.background="none"; e.currentTarget.style.color=C.gold; }}>
                 ⊞ View Facade Detail
               </button>
