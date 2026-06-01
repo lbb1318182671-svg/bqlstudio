@@ -26,34 +26,51 @@ const PROJECTS = [
   { id:"01", title:"The Enfolding", subtitle:"Corita Kent Art Center",
     type:"Art foundation building", year:"Spring 2024", tag:"Individual", location:"Boyle Heights, Los Angeles", hasFacade:true, facadePages:[0,4],
     brief:"A folded architectural skin wraps the art center, filtering light and creating a gradient of enclosure from public plaza to intimate gallery. The envelope responds to the existing urban fabric while establishing a distinct institutional presence.",
+    cover:"/images/01/cover.jpg",
     images:["/images/01/1.jpg","/images/01/2.jpg","/images/01/3.jpg","/images/01/4.jpg","/images/01/5.jpg","/images/01/6.jpg","/images/01/7.jpg","/images/01/8.jpg"],
     captions:["","Site analysis, Boyle Heights, Los Angeles.","Program distribution across folded levels.","Structural logic of the envelope.","Facade material study.","Section through the main gallery volume.","Interior render — filtered light through skin.","Detail: folded panel connection."] },
   { id:"02", title:"The Bones and Scales", subtitle:"Facade Design & Joint Studies",
     type:"Facade design", year:"Spring 2025", tag:"Group project", location:"Los Angeles, CA", hasFacade:true, facadePages:[0,3],
     brief:"An investigation into tectonic expression through facade articulation. The project studies how structural logic — bones — and surface modulation — scales — can be unified into a coherent architectural language.",
+    cover:"/images/02/cover.jpg",
     images:["/images/02/1.jpg","/images/02/2.jpg","/images/02/3.jpg","/images/02/4.jpg","/images/02/5.jpg"],
     captions:["","Facade system detail — joint and scale studies.","Facade system detail — joint and scale studies.","Facade system detail — joint and scale studies.","Facade system detail — joint and scale studies."] },
   { id:"03", title:"Eternal Life", subtitle:"In Between the Living and the Deceased",
     type:"Memorial complex", year:"Fall 2024", tag:"Group project", location:"Los Angeles, CA", hasFacade:false,
     brief:"A memorial complex that negotiates the threshold between the living and the deceased. Spatial sequences guide visitors through states of grief, remembrance, and release, using light and material to mark the passage of time.",
-    images:Array(10).fill(null), captions:["","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory."] },
+    cover:"/images/03/cover.jpg",
+    images:["/images/03/1.jpg","/images/03/2.jpg","/images/03/3.jpg","/images/03/4.jpg","/images/03/5.jpg","/images/03/6.jpg","/images/03/7.jpg","/images/03/8.jpg","/images/03/9.jpg","/images/03/10.jpg"],
+    captions:["","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory.","Spatial threshold between life and memory."] },
   { id:"04", title:"Co-Individual Housing", subtitle:"Co-living from Minimal Dwelling",
     type:"Residential", year:"Fall 2023", tag:"Individual", location:"Los Angeles, CA", hasFacade:false,
     brief:"Starting from the minimal dwelling unit, the project builds upward toward a co-living model that preserves individual autonomy while creating meaningful shared spaces. Aggregation strategies allow flexible density responses.",
-    images:["/images/04/1.jpg","/images/04/2.jpg","/images/04/3.jpg","/images/04/4.jpg","/images/04/5.jpg","/images/04/6.jpg","/images/04/7.jpg"],
+    cover:"/images/04/cover.jpg",
+    images:["/images/04/1.jpg","/images/04/2.jpg","/images/04/3.jpg","/images/04/4.jpg","/images/04/5.jpg","/images/04/6.jpg","/images/04/7.jpg","/images/04/8.jpg"],
     captions:["","Modular co-living unit aggregation study.","Modular co-living unit aggregation study.","Modular co-living unit aggregation study.","Modular co-living unit aggregation study.","Modular co-living unit aggregation study.","Modular co-living unit aggregation study."] },
   { id:"05", title:"The Rise of Altadena", subtitle:"Community Church",
     type:"Church — Competition", year:"Fall 2025", tag:"Team competition", location:"Altadena, CA", hasFacade:false,
     brief:"A community church conceived as an act of spiritual ascent. The structure rises from the earth through a series of compressed and expanding volumes, culminating in a luminous sanctuary that anchors the post-fire Altadena community.",
-    images:Array(10).fill(null), captions:["","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent."] },
+    cover:"/images/05/cover.jpg",
+    images:["/images/05/1.jpg","/images/05/2.jpg","/images/05/3.jpg","/images/05/4.jpg","/images/05/5.jpg"],
+    captions:["","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent.","Structural expression of spiritual ascent."] },
   { id:"06", title:"BIM Modeling", subtitle:"Revit Sample",
     type:"BIM / Documentation", year:"2023–2024", tag:"Professional", location:"Los Angeles, CA", hasFacade:false,
     brief:"A professional BIM documentation sample demonstrating coordination across architectural, structural, and MEP systems. Developed to industry standards with detailed construction documentation and clash detection.",
-    images:Array(10).fill(null), captions:["","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope."] },
+    cover:"/images/06/cover.jpg",
+    images:["/images/06/1.jpg","/images/06/2.jpg","/images/06/3.jpg","/images/06/4.jpg"],
+    captions:["","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope.","Coordinated BIM model — structural and envelope."] },
   { id:"07", title:"Model Collection", subtitle:"Fabrication & Physical Models",
     type:"Fabrication", year:"Spring 2025", tag:"Collection", location:"Los Angeles, CA", hasFacade:false,
     brief:"A curated collection of physical models produced across multiple studio projects. Techniques include laser cutting, hand fabrication, and 3D printing, reflecting the development of spatial thinking through making.",
-    images:Array(10).fill(null), captions:["","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models.","Laser-cut and hand-crafted architectural models."] },
+    cover:"/images/07/cover.jpg",
+    images:["/images/07/1.jpg","/images/07/2.jpg"],
+    captions:["","Laser-cut and hand-crafted architectural models."] },
+  { id:"08", title:"New Urban Model", subtitle:"Aging Population",
+    type:"Academic Thesis Project", year:"Fall 2024 + Spring 2025", tag:"Individual", location:"Los Angeles, CA", hasFacade:false,
+    brief:"An urban design thesis investigating new models of community infrastructure for aging populations. The project proposes a distributed network of care-integrated housing and public space across Los Angeles.",
+    cover:"/images/08/cover.jpg",
+    images:["/images/08/1.jpg","/images/08/2.jpg","/images/08/3.jpg","/images/08/4.jpg","/images/08/5.jpg","/images/08/6.jpg","/images/08/7.jpg","/images/08/8.jpg"],
+    captions:["","Urban model detail.","Urban model detail.","Urban model detail.","Urban model detail.","Urban model detail.","Urban model detail.","Urban model detail."] },
 ];
 
 const FACADES = [
@@ -241,11 +258,11 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
         minHeight:"100vh", display:"flex", alignItems:"flex-start",
         justifyContent:"center", position:"relative",
         background:"#ffffff",
-        paddingTop:`calc(${TOP}px + 1rem)` }}>
+        paddingTop:`calc(${TOP}px + 0.25rem)` }}>
 
         <div style={{ width:"100%", display:"flex", alignItems:"center",
           justifyContent:"center",
-          padding:"clamp(0.5rem,2vw,1.5rem) clamp(2.5rem,7vw,5.5rem)" }}>
+          padding:"clamp(0.25rem,1vw,0.75rem) clamp(2.5rem,7vw,5.5rem)" }}>
           {project.images[idx] ? (
             <img src={project.images[idx]} alt={`${project.title} — slide ${idx+1}`}
               style={{ maxWidth:"100%", maxHeight:"calc(100vh - 220px)",
@@ -444,8 +461,8 @@ function ProjectCard({ project, onOpen, onFacade }) {
         transform:hov?"translateY(-4px)":"none", background:"rgba(255,255,255,0.02)", cursor:"pointer" }}>
       <div style={{ aspectRatio:"4/3", background:"rgba(255,255,255,0.03)", display:"flex",
         alignItems:"center", justifyContent:"center", position:"relative", overflow:"hidden" }}>
-        {project.images[0]
-          ? <img src={project.images[0]} alt={project.title} style={{ width:"100%",height:"100%",objectFit:"cover" }}/>
+        {(project.cover || project.images[0])
+          ? <img src={project.cover || project.images[0]} alt={project.title} style={{ width:"100%",height:"100%",objectFit:"cover" }}/>
           : <>
               <span style={{ fontFamily:F.display, fontSize:"3.5rem", color:"rgba(196,166,110,0.07)", fontWeight:300, userSelect:"none" }}>{project.id}</span>
               <div style={{ position:"absolute",inset:0, background:"radial-gradient(circle at 30% 60%, rgba(196,166,110,0.04),transparent 70%)" }}/>
