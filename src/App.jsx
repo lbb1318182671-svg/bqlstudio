@@ -127,11 +127,7 @@ function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
         <button onClick={()=>onNavigate(null)} style={{ background:"none",border:"none",
           cursor:"pointer", display:"flex", alignItems:"center", gap:"0.65rem" }}>
           {/* Replace with: <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto" }} /> */}
-          <div style={{ height:32, width:32, border:"1px dashed rgba(196,166,110,0.35)", borderRadius:2,
-            display:"flex", alignItems:"center", justifyContent:"center" }}>
-            <span style={{ fontFamily:F.ui, fontSize:"0.45rem", letterSpacing:"0.08em",
-              color:"rgba(196,166,110,0.4)", textTransform:"uppercase", lineHeight:1.2, textAlign:"center" }}>your<br/>logo</span>
-          </div>
+          <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto" }} />
           <div style={{ display:"flex", flexDirection:"column", gap:"1px" }}>
             <span style={{ fontFamily:F.ui, fontSize:"0.82rem", letterSpacing:"0.18em", color:C.text, fontWeight:300, textTransform:"uppercase" }}>BQL Studio</span>
             <span style={{ fontFamily:F.ui, fontSize:"0.42rem", letterSpacing:"0.16em", color:"rgba(255,255,255,0.18)", fontWeight:300, textTransform:"lowercase" }}>by Bingqing Li</span>
@@ -394,13 +390,7 @@ function Home({ onNavigate }) {
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
         <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:80 }}>
           {/* Replace with: <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(48px,7vw,72px)", width:"auto", marginBottom:"clamp(1rem,2.5vh,2rem)" }} /> */}
-          <div style={{ height:"clamp(48px,6vw,72px)", width:"clamp(38px,5vw,58px)",
-            border:"1px dashed rgba(196,166,110,0.28)", borderRadius:2,
-            display:"flex", alignItems:"center", justifyContent:"center",
-            marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }}>
-            <span style={{ fontFamily:F.ui, fontSize:"0.45rem", letterSpacing:"0.1em",
-              color:"rgba(196,166,110,0.35)", textTransform:"uppercase", textAlign:"center", lineHeight:1.5 }}>your<br/>logo<br/>PNG</span>
-          </div>
+          <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(48px,6vw,72px)", width:"auto", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }} />
           <p style={{ fontFamily:F.ui, fontSize:"0.63rem", letterSpacing:"0.26em", textTransform:"uppercase", color:C.gold, marginBottom:"2rem" }}>
             Architecture &amp; Photography — bqlstudio.com
           </p>
