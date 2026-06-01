@@ -130,7 +130,7 @@ function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
           <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto" }} />
           <div style={{ display:"flex", flexDirection:"column", gap:"1px" }}>
             <span style={{ fontFamily:F.ui, fontSize:"0.82rem", letterSpacing:"0.18em", color:C.text, fontWeight:300, textTransform:"uppercase" }}>BQL Studio</span>
-            <span style={{ fontFamily:F.ui, fontSize:"0.42rem", letterSpacing:"0.16em", color:"rgba(255,255,255,0.18)", fontWeight:300, textTransform:"lowercase" }}>by Bingqing Li</span>
+            <span style={{ fontFamily:F.ui, fontSize:"0.42rem", letterSpacing:"0.16em", color:"rgba(255,255,255,0.45)", fontWeight:300, textTransform:"none" }}>by Bingqing Li</span>
           </div>
         </button>
         <nav style={{ display:"flex", gap:"2rem" }} className="desk-nav">
@@ -388,12 +388,12 @@ function Home({ onNavigate }) {
   return (
     <div style={{ opacity:vis?1:0, transform:vis?"none":"translateY(14px)", transition:"opacity .7s ease, transform .7s ease" }}>
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
-        <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:80 }}>
+        <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:68 }}>
           {/* Replace with: <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(48px,7vw,72px)", width:"auto", marginBottom:"clamp(1rem,2.5vh,2rem)" }} /> */}
           <div style={{ display:"flex", justifyContent:"center", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }}>
              <img src="/logo.png" alt="BQL Studio" 
               style={{ 
-              height:"clamp(48px,6vw,72px)", 
+              height:"clamp(60px,6vw,96px)", 
               width:"auto",
               maxWidth:"clamp(120px,15vw,180px)",
               objectFit:"contain",
