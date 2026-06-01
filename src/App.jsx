@@ -390,7 +390,15 @@ function Home({ onNavigate }) {
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
         <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:80 }}>
           {/* Replace with: <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(48px,7vw,72px)", width:"auto", marginBottom:"clamp(1rem,2.5vh,2rem)" }} /> */}
-          <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(48px,6vw,72px)", width:"auto", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }} />
+          <div style={{ display:"flex", justifyContent:"center", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }}>
+             <img src="/logo.png" alt="BQL Studio" 
+              style={{ 
+              height:"clamp(48px,6vw,72px)", 
+              width:"auto",
+              maxWidth:"clamp(120px,15vw,180px)",
+              objectFit:"contain",
+          }} />
+</div>
           <p style={{ fontFamily:F.ui, fontSize:"0.63rem", letterSpacing:"0.26em", textTransform:"uppercase", color:C.gold, marginBottom:"2rem" }}>
             Architecture &amp; Photography — bqlstudio.com
           </p>
