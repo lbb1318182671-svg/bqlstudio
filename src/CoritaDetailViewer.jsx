@@ -5,7 +5,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const TOP_LAYER_MOTION = {
-  ENV1: { dir: new THREE.Vector3(-1, 0, 0), distance: 0.165 },
+  ENV1: { dir: new THREE.Vector3(-1, 0, 0), distance: 0.3 },
   ENV2: { dir: new THREE.Vector3(-1, 0, 0), distance: 0.75 },
   ROOF_UP: { dir: new THREE.Vector3(0, 1, 0), distance: 0.3 },
   BUILDING: { dir: new THREE.Vector3(0, 0, 0), distance: 0 },
@@ -195,10 +195,10 @@ const MAT = {
   env2_bracket: createMetal(0x8e9498, 0.32),
   env2_pv: new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
-    roughness: 0.28,
+    roughness: 0.62,
     metalness: 0,
     transparent: true,
-    opacity: 0.45,
+    opacity: 0.34,
     depthWrite: false,
   }),
   roof_finish: createMetal(0xb8bdc0, 0.28),
@@ -260,12 +260,8 @@ function printGltfHierarchy(node, depth = 0) {
 function cleanEase(t) {
   if (t <= 0) return 0;
   if (t >= 1) return 1;
-  if (t < 0.16) return (t * t) / 0.16;
-  if (t > 0.9) {
-    const u = (t - 0.9) / 0.1;
-    return 0.9 + 0.1 * (1 - (1 - u) * (1 - u));
-  }
-  return t;
+  const back = 0.72;
+  return 1 + (back + 1) * Math.pow(t - 1, 3) + back * Math.pow(t - 1, 2);
 }
 
 function startTween(track, target, duration) {
@@ -295,13 +291,13 @@ function setMeshesHighlighted(meshes, active) {
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     materials.forEach(material => {
       if (!material?.emissive) return;
-      material.emissive.setHex(active ? 0xf4d28d : 0x000000);
-      material.emissiveIntensity = active ? 0.22 : 0;
+      material.emissive.setHex(active ? 0xf7fbff : 0x000000);
+      material.emissiveIntensity = active ? 0.029 : 0;
     });
   });
 }
 
-function createHitBox(objects, parent, userData, pad) {
+function createHitBox(objects, parent, userData, pad, scaleFactor = 1) {
   const bbox = new THREE.Box3();
   objects.forEach(object => {
     bbox.union(new THREE.Box3().setFromObject(object));
@@ -311,7 +307,10 @@ function createHitBox(objects, parent, userData, pad) {
   bbox.expandByScalar(pad);
   const size = bbox.getSize(new THREE.Vector3());
   const center = bbox.getCenter(new THREE.Vector3());
-  const hitBox = new THREE.Mesh(new THREE.BoxGeometry(size.x, size.y, size.z), HIT_MAT);
+  const hitBox = new THREE.Mesh(
+    new THREE.BoxGeometry(size.x * scaleFactor, size.y * scaleFactor, size.z * scaleFactor),
+    HIT_MAT
+  );
   hitBox.userData = { ...userData, isHitArea: true };
   hitBox.position.copy(parent.worldToLocal(center.clone()));
   parent.add(hitBox);
@@ -346,7 +345,7 @@ function getHoverName(hitObject, systemOpen, detailOpen) {
   return SYSTEM_LABELS[topLayerName] || "SYSTEM";
 }
 
-export default function FacadeViewer({ onClose }) {
+export default function CoritaDetailViewer({ onClose }) {
   const mountRef = useRef(null);
   const stateRef = useRef({
     renderer: null,
@@ -441,6 +440,11 @@ export default function FacadeViewer({ onClose }) {
 
     if (!DETAIL_GROUPS[topLayerName]) return;
 
+    if (topLayerName === "BUILDING" && detailExploded.ENV1 && detailExploded.ENV2 && detailExploded.ROOF_UP) {
+      closeAll();
+      return;
+    }
+
     const nextOpen = !detailExploded[topLayerName];
     if (topLayerName !== "BUILDING") {
       startTween(s.detailTracks[topLayerName], nextOpen ? 1 : 0, 460);
@@ -461,7 +465,7 @@ export default function FacadeViewer({ onClose }) {
     s.renderer = renderer;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf8f7f4);
+    scene.background = new THREE.Color(0xffffff);
     s.scene = scene;
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.9));
@@ -590,12 +594,13 @@ export default function FacadeViewer({ onClose }) {
           }
         });
 
+        const systemHitScale = topLayerName === "BUILDING" ? 0.5 : 1;
         const systemHitBox = createHitBox(Object.values(childLayersByName), topLayer, {
           interactionLevel: "system",
           topLayerName,
           detailName: SYSTEM_LABELS[topLayerName],
           highlightKey: systemKey(topLayerName),
-        }, hitPad * 1.2);
+        }, hitPad * 1.2, systemHitScale);
 
         if (systemHitBox) {
           systemTargets.push(systemHitBox);
@@ -720,7 +725,7 @@ export default function FacadeViewer({ onClose }) {
   const expandedDetails = Object.values(detailExploded).filter(Boolean).length;
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", background: "#f8f7f4" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", background: "#ffffff" }}>
       <div
         ref={mountRef}
         style={{ width: "100%", height: "100%" }}
@@ -740,7 +745,7 @@ export default function FacadeViewer({ onClose }) {
         maxHeight: "calc(100% - 140px)",
         overflowY: "auto",
         padding: "0.35rem 0",
-        background: "rgba(248,247,244,0.58)",
+        background: "rgba(255,255,255,0.58)",
         borderLeft: `1px solid rgba(196,166,110,0.38)`,
         backdropFilter: "blur(10px)",
         zIndex: 8,
@@ -760,7 +765,7 @@ export default function FacadeViewer({ onClose }) {
                   width: "100%",
                   border: "none",
                   borderLeft: open ? `2px solid ${C_gold}` : "2px solid transparent",
-                  background: activeSystem || open ? "rgba(196,166,110,0.11)" : "transparent",
+                  background: activeSystem || open ? "rgba(196,166,110,0.011)" : "transparent",
                   color: open ? "#080807" : "rgba(8,8,7,0.64)",
                   cursor: "pointer",
                   fontFamily: F,
@@ -795,7 +800,7 @@ export default function FacadeViewer({ onClose }) {
                           display: "block",
                           width: "100%",
                           border: "none",
-                          background: activeDetail ? "rgba(8,8,7,0.08)" : "transparent",
+                          background: activeDetail ? "rgba(8,8,7,0.008)" : "transparent",
                           color: activeDetail ? "#080807" : "rgba(8,8,7,0.5)",
                           cursor: item.url ? "pointer" : "default",
                           fontFamily: F,
@@ -827,7 +832,7 @@ export default function FacadeViewer({ onClose }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "rgba(248,247,244,0.95)",
+          background: "rgba(255,255,255,0.95)",
         }}>
           <div style={{
             width: 40,
@@ -850,24 +855,25 @@ export default function FacadeViewer({ onClose }) {
       {label && (
         <div style={{
           position: "absolute",
-          left: label.x + 16,
-          top: label.y - 10,
-          background: "rgba(8,8,7,0.88)",
-          border: `1px solid rgba(196,166,110,0.3)`,
-          padding: "0.55rem 0.9rem",
+          left: label.x + 10,
+          top: label.y - 6,
+          background: "rgba(255,255,255,0.62)",
+          border: "1px solid rgba(21,21,21,0.08)",
+          padding: "0.28rem 0.46rem",
           pointerEvents: "none",
           zIndex: 10,
-          maxWidth: 270,
+          maxWidth: 160,
+          backdropFilter: "blur(7px)",
         }}>
           <p style={{
             fontFamily: F,
-            fontSize: "0.72rem",
+            fontSize: "0.36rem",
             fontWeight: 400,
-            color: "#fff",
+            color: "rgba(21,21,21,0.66)",
             margin: 0,
-            lineHeight: 1.35,
+            lineHeight: 1.25,
             textTransform: "uppercase",
-            letterSpacing: "0.08em",
+            letterSpacing: "0.07em",
           }}>{label.name}</p>
         </div>
       )}

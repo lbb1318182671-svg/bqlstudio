@@ -1,24 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import FacadeViewer from "./FacadeViewer";
+import CoritaDetailViewer from "./CoritaDetailViewer";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { background: #080807; color: #ede8df; -webkit-font-smoothing: antialiased; }
+  body { background: #ffffff; color: #151515; -webkit-font-smoothing: antialiased; }
   ::-webkit-scrollbar { width: 3px; }
-  ::-webkit-scrollbar-track { background: #080807; }
-  ::-webkit-scrollbar-thumb { background: rgba(196,166,110,0.3); border-radius: 2px; }
+  ::-webkit-scrollbar-track { background: #ffffff; }
+  ::-webkit-scrollbar-thumb { background: rgba(166,132,75,0.36); border-radius: 2px; }
 `;
 
 const C = {
-  bg:      "#080807",
-  surface: "#141310",
-  gold:    "#c4a66e",
-  goldDim: "rgba(196,166,110,0.3)",
-  text:    "#ffffff",
-  textDim: "rgba(255,255,255,0.65)",
-  border:  "rgba(196,166,110,0.18)",
+  bg:      "#ffffff",
+  surface: "#f6f6f3",
+  gold:    "#a6844b",
+  goldDim: "rgba(166,132,75,0.3)",
+  text:    "#151515",
+  textDim: "rgba(21,21,21,0.62)",
+  border:  "rgba(21,21,21,0.14)",
 };
 const F = { display:"'Jost', sans-serif", ui:"'Jost', sans-serif" };
 
@@ -74,7 +74,7 @@ const PROJECTS = [
 ];
 
 const FACADES = [
-  { id:"F1", title:"The Enfolding — Facade Detail", layers:[] },
+  { id:"F1", title:"The Enfolding — Facade Detail", cover:"/images/corita-detail-cover.svg", layers:[] },
   { id:"F2", title:"/", layers:["Double-Glazed Unit (6/16/6)","Aluminium Frame","Thermally Broken Mullion","Fire-Stop Barrier","Spandrel Panel","Interior Finish"] },
   { id:"F3", title:"/", layers:["Facing Brick (100mm)","Open Cavity","Stainless Steel Ties","Breather Membrane","Rigid Insulation","Structural Frame"] },
   { id:"F4", title:"Folded Metal Skin", layers:["Folded Zinc Panel","Sub-Frame Bracket","Thermal Break","Air Barrier","Structural Steel Frame","Interior Lining"] },
@@ -118,16 +118,16 @@ function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
   return (
     <>
     <header style={{ position:"fixed",top:0,left:0,right:0,zIndex:40,
-      background:"rgba(8,8,7,0.93)", backdropFilter:"blur(14px)",
+      background:"rgba(255,255,255,0.93)", backdropFilter:"blur(14px)",
       borderBottom:`1px solid ${C.border}` }}>
       <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",
         height:58, padding:"0 clamp(1.25rem,4vw,3.5rem)" }}>
         <button onClick={()=>onNavigate(null)} style={{ background:"none",border:"none",
           cursor:"pointer", display:"flex", alignItems:"center", gap:"0.65rem" }}>
-          <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto" }} />
+          <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto", filter:"invert(1)" }} />
           <div style={{ display:"flex", flexDirection:"column", gap:"1px" }}>
             <span style={{ fontFamily:F.ui, fontSize:"0.82rem", letterSpacing:"0.18em", color:C.text, fontWeight:300, textTransform:"uppercase" }}>BQL Studio</span>
-            <span style={{ fontFamily:F.ui, fontSize:"0.42rem", letterSpacing:"0.16em", color:"rgba(255,255,255,0.45)", fontWeight:300, textTransform:"none" }}>by Bingqing Li</span>
+            <span style={{ fontFamily:F.ui, fontSize:"0.525rem", letterSpacing:"0.16em", color:"rgba(21,21,21,0.58)", fontWeight:300, textTransform:"none" }}>by Bingqing Li</span>
           </div>
         </button>
         <nav style={{ display:"flex", gap:"2rem" }} className="desk-nav">
@@ -161,7 +161,7 @@ function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
     </header>
     {currentProject && (
       <div style={{ position:"fixed", top:58, left:0, right:0, zIndex:39, height:28,
-        background:"rgba(8,8,7,0.95)", backdropFilter:"blur(10px)",
+        background:"rgba(255,255,255,0.95)", backdropFilter:"blur(10px)",
         borderBottom:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"center" }}>
         <span style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:C.textDim }}>
           {currentProject.id} — {currentProject.title}
@@ -177,7 +177,7 @@ function ProjectIndexSidebar({ currentProject, onSwitchProject, top=58 }) {
     <div style={{ position:"fixed", left:0, top:top, bottom:0, zIndex:30,
       width:"clamp(48px,5.5vw,64px)", display:"flex", flexDirection:"column",
       alignItems:"center", justifyContent:"center", gap:"clamp(0.6rem,1.2vh,1rem)",
-      borderRight:`1px solid ${C.border}`, background:"rgba(8,8,7,0.82)", padding:"1.5rem 0" }}>
+      borderRight:`1px solid ${C.border}`, background:"rgba(255,255,255,0.86)", padding:"1.5rem 0" }}>
       {PROJECTS.map(p => {
         const isCurrent = p.id === currentProject.id;
         return <ProjectIndexItem key={p.id} project={p} isCurrent={isCurrent} onSwitch={()=>onSwitchProject(p)}/>;
@@ -203,7 +203,7 @@ function ProjectIndexItem({ project, isCurrent, onSwitch }) {
         pointerEvents:"none", opacity: hov ? 1 : 0,
         transform: hov ? "translateY(-50%) translateX(0)" : "translateY(-50%) translateX(-6px)",
         transition:"opacity .2s ease, transform .2s ease",
-        background:"#141310", border:`1px solid ${C.border}`,
+        background:"#ffffff", border:`1px solid ${C.border}`,
         padding:"0.55rem 0.85rem", whiteSpace:"nowrap", zIndex:50 }}>
         <p style={{ fontFamily:F.display, fontSize:"0.82rem", fontWeight:300, color:C.text, margin:0, lineHeight:1.3 }}>{project.title}</p>
         <p style={{ fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.14em", textTransform:"uppercase", color:C.gold, margin:"0.3rem 0 0" }}>{project.type}</p>
@@ -212,7 +212,7 @@ function ProjectIndexItem({ project, isCurrent, onSwitch }) {
   );
 }
 
-function ProjectViewer({ project, onSwitchProject, onNavigate }) {
+function ProjectViewer({ project, onSwitchProject, onNavigate, onOpenDetail }) {
   const [idx, setIdx] = useState(0);
   const total = project.images.length;
   const prev = useCallback(()=>setIdx(i=>Math.max(0,i-1)),[]);
@@ -246,12 +246,12 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
         justifyContent:"center", position:"relative",
         background:"#ffffff",
         paddingTop:`calc(${TOP}px + 0.25rem)` }}>
-        <div style={{ width:"100%", display:"flex", alignItems:"center",
+        <div style={{ width:"100%", height:`calc(100vh - ${TOP}px - ${BH})`, display:"flex", alignItems:"center",
           justifyContent:"center",
-          padding:"clamp(0.25rem,1vw,0.75rem) clamp(2.5rem,7vw,5.5rem)" }}>
+          padding:"0 clamp(2.5rem,7vw,5.5rem)" }}>
           {project.images[idx] ? (
             <img src={project.images[idx]} alt={`${project.title} — slide ${idx+1}`}
-              style={{ maxWidth:"100%", maxHeight:"calc(100vh - 220px)",
+              style={{ maxWidth:"100%", height:"100%", maxHeight:"100%",
                 objectFit:"contain", display:"block" }}/>
           ) : (
             <div style={{ width:"100%", maxWidth:860, aspectRatio:"16/9",
@@ -280,7 +280,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
         ))}
       </div>
       <div style={{ position:"fixed", bottom:0, left:SB, right:0, zIndex:30,
-        background:"rgba(8,8,7,0.96)", backdropFilter:"blur(18px)",
+        background:"rgba(255,255,255,0.96)", backdropFilter:"blur(18px)",
         borderTop:`1px solid ${C.border}`,
         padding:"0.5rem clamp(1.5rem,5vw,4rem) 0.8rem" }}>
         <p style={{ fontFamily:F.display, fontStyle:"italic",
@@ -329,7 +329,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:"0.35rem" }}>
           <div style={{ flex:1 }}/>
           <p style={{ fontFamily:F.display, fontSize:"clamp(0.62rem,1.2vw,0.76rem)",
-            color:"rgba(255,255,255,0.28)", textAlign:"center", letterSpacing:"0.04em", margin:0 }}>
+            color:"rgba(21,21,21,0.38)", textAlign:"center", letterSpacing:"0.04em", margin:0 }}>
             {project.subtitle}
             <span style={{ color:C.goldDim, margin:"0 0.45rem" }}>·</span>
             {project.type}
@@ -338,7 +338,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
           </p>
           <div style={{ flex:1, display:"flex", justifyContent:"flex-end" }}>
             {project.hasFacade && project.facadePages?.includes(idx) && (
-              <button onClick={()=>onNavigate("Facade Designs")} style={{
+              <button onClick={()=>project.id==="01" ? onOpenDetail("corita") : onNavigate("Facade Designs")} style={{
                 background:"none", border:`1px solid rgba(196,166,110,0.45)`,
                 color:C.gold, fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.16em",
                 textTransform:"uppercase", padding:"3px 12px", cursor:"pointer", transition:"all .2s",
@@ -364,7 +364,7 @@ function Home({ onNavigate }) {
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
         <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:68 }}>
           <div style={{ display:"flex", justifyContent:"center", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }}>
-            <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(60px,6vw,96px)", width:"auto", maxWidth:"clamp(120px,15vw,180px)", objectFit:"contain" }} />
+            <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(60px,6vw,96px)", width:"auto", maxWidth:"clamp(120px,15vw,180px)", objectFit:"contain", filter:"invert(1)" }} />
           </div>
           <p style={{ fontFamily:F.ui, fontSize:"0.63rem", letterSpacing:"0.26em", textTransform:"uppercase", color:C.gold, marginBottom:"2rem" }}>
             Architecture &amp; Photography — bqlstudio.com
@@ -403,14 +403,19 @@ function Home({ onNavigate }) {
   );
 }
 
-function WorkSamples({ onOpenProject, onNavigate }) {
+function WorkSamples({ onOpenProject, onNavigate, onOpenDetail }) {
   return (
     <div style={{ padding:"clamp(2rem,8vw,6rem)", paddingTop:100 }}>
       <SectionHeader label="01" title="Work Samples"/>
       <div style={{ height:"clamp(2rem,5vw,3.5rem)" }}/>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(min(100%,300px),1fr))", gap:"clamp(1rem,3vw,2rem)" }}>
         {PROJECTS.map(p=>(
-          <ProjectCard key={p.id} project={p} onOpen={()=>onOpenProject(p)} onFacade={()=>onNavigate("Facade Designs")}/>
+          <ProjectCard
+            key={p.id}
+            project={p}
+            onOpen={()=>onOpenProject(p)}
+            onFacade={()=>p.id==="01" ? onOpenDetail("corita") : onNavigate("Facade Designs")}
+          />
         ))}
       </div>
     </div>
@@ -422,8 +427,8 @@ function ProjectCard({ project, onOpen, onFacade }) {
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} onClick={onOpen}
       style={{ border:`1px solid ${hov?"rgba(196,166,110,0.48)":C.border}`, transition:"all .3s",
-        transform:hov?"translateY(-4px)":"none", background:"rgba(255,255,255,0.02)", cursor:"pointer" }}>
-      <div style={{ aspectRatio:"4/3", background:"rgba(255,255,255,0.03)", display:"flex",
+        transform:hov?"translateY(-4px)":"none", background:"rgba(21,21,21,0.018)", cursor:"pointer" }}>
+      <div style={{ aspectRatio:"4/3", background:"rgba(21,21,21,0.035)", display:"flex",
         alignItems:"center", justifyContent:"center", position:"relative", overflow:"hidden" }}>
         {(project.cover || project.images[0])
           ? <img src={project.cover || project.images[0]} alt={project.title} style={{ width:"100%",height:"100%",objectFit:"cover" }}/>
@@ -436,7 +441,7 @@ function ProjectCard({ project, onOpen, onFacade }) {
       <div style={{ padding:"1.2rem 1.5rem" }}>
         <div style={{ display:"flex",justifyContent:"space-between",alignItems:"baseline" }}>
           <h3 style={{ fontFamily:F.display, fontSize:"1.05rem", fontWeight:300, color:C.text, margin:0 }}>{project.title}</h3>
-          <span style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.1em", color:"rgba(237,232,223,0.28)" }}>{project.year}</span>
+          <span style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.1em", color:"rgba(21,21,21,0.34)" }}>{project.year}</span>
         </div>
         <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.83rem", color:C.textDim, margin:"0.22rem 0 0.55rem", textAlign:"left" }}>{project.subtitle}</p>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
@@ -458,18 +463,11 @@ function ProjectCard({ project, onOpen, onFacade }) {
 }
 
 /* ─── FACADE DESIGNS ─────────────────────────────────────────────────────── */
-function FacadeDesigns() {
-  const [showViewer, setShowViewer] = useState(false);
+function FacadeDesigns({ onOpenDetail }) {
   const [sel, setSel] = useState(null);
   const [exp, setExp] = useState(false);
   return (
     <div style={{ padding:"clamp(2rem,8vw,6rem)", paddingTop:100 }}>
-      {/* 3D viewer overlay — opens when F1 card is clicked */}
-      {showViewer && (
-        <div style={{ position:"fixed", inset:0, zIndex:80 }}>
-          <FacadeViewer onClose={()=>setShowViewer(false)}/>
-        </div>
-      )}
       <SectionHeader label="02" title="Facade Designs"/>
       <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.92rem", color:C.textDim, margin:"1rem 0 clamp(2rem,5vw,3.5rem)" }}>
         Click a facade to explore the material schedule.
@@ -479,18 +477,27 @@ function FacadeDesigns() {
           const [hov,setHov]=useState(false);
           return (
             <div key={f.id}
-              onClick={()=>{ if(f.id==="F1"){ setShowViewer(true); } else { setSel(f); setExp(false); } }}
+              onClick={()=>{ if(f.id==="F1"){ onOpenDetail("corita"); } else { setSel(f); setExp(false); } }}
               onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
               style={{ border:`1px solid ${hov?"rgba(196,166,110,0.5)":C.border}`, cursor:"pointer", padding:"2rem",
-                background:hov?"rgba(196,166,110,0.03)":"rgba(255,255,255,0.02)", transition:"all .3s", transform:hov?"translateY(-4px)":"none" }}>
-              <div style={{ aspectRatio:"3/2", marginBottom:"1.5rem", background:"rgba(255,255,255,0.03)",
+                background:hov?"rgba(166,132,75,0.045)":"rgba(21,21,21,0.018)", transition:"all .3s", transform:hov?"translateY(-4px)":"none" }}>
+              <div style={{ aspectRatio:"3/2", marginBottom:"1.5rem", background:"rgba(21,21,21,0.035)",
                 position:"relative", overflow:"hidden", display:"flex",alignItems:"center",justifyContent:"center" }}>
-                {[0,1,2,3].map(i=>(
-                  <div key={i} style={{ position:"absolute",left:`${8+i*22}%`,top:"12%",bottom:"12%",width:"18%",
-                    background:`rgba(196,166,110,${0.07+i*0.04})`, border:`1px solid rgba(196,166,110,0.14)`,
-                    transform:hov?`translateY(${i%2===0?-7:5}px)`:"none", transition:`transform ${0.28+i*0.05}s ease` }}/>
-                ))}
-                <span style={{ position:"relative",zIndex:1,fontFamily:F.ui,fontSize:"0.56rem",letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(196,166,110,0.38)" }}>{f.id}</span>
+                {f.cover ? (
+                  <img src={f.cover} alt={f.title} style={{
+                    width:"100%", height:"100%", objectFit:"cover", display:"block",
+                    transform:hov?"scale(1.025)":"scale(1)", transition:"transform .35s ease"
+                  }}/>
+                ) : (
+                  <>
+                    {[0,1,2,3].map(i=>(
+                      <div key={i} style={{ position:"absolute",left:`${8+i*22}%`,top:"12%",bottom:"12%",width:"18%",
+                        background:`rgba(196,166,110,${0.07+i*0.04})`, border:`1px solid rgba(196,166,110,0.14)`,
+                        transform:hov?`translateY(${i%2===0?-7:5}px)`:"none", transition:`transform ${0.28+i*0.05}s ease` }}/>
+                    ))}
+                    <span style={{ position:"relative",zIndex:1,fontFamily:F.ui,fontSize:"0.56rem",letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(196,166,110,0.38)" }}>{f.id}</span>
+                  </>
+                )}
               </div>
               <h3 style={{ fontFamily:F.display, fontSize:"1rem", fontWeight:300, color:C.text, margin:"0 0 0.4rem" }}>{f.title}</h3>
               {f.layers.length > 0 && (
@@ -504,8 +511,8 @@ function FacadeDesigns() {
         })}
       </div>
       {sel && sel.layers.length > 0 && (
-        <div onClick={()=>setSel(null)} style={{ position:"fixed",inset:0,zIndex:60,background:"rgba(4,4,3,0.9)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"clamp(1rem,5vw,3rem)" }}>
-          <div onClick={e=>e.stopPropagation()} style={{ background:"#0f0e0c", border:`1px solid rgba(196,166,110,0.28)`, maxWidth:540, width:"100%", padding:"clamp(1.5rem,5vw,3rem)" }}>
+        <div onClick={()=>setSel(null)} style={{ position:"fixed",inset:0,zIndex:60,background:"rgba(255,255,255,0.86)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"clamp(1rem,5vw,3rem)" }}>
+          <div onClick={e=>e.stopPropagation()} style={{ background:"#ffffff", border:`1px solid rgba(166,132,75,0.28)`, maxWidth:540, width:"100%", padding:"clamp(1.5rem,5vw,3rem)" }}>
             <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start" }}>
               <h2 style={{ fontFamily:F.display, fontSize:"clamp(1.2rem,4vw,1.75rem)", fontWeight:300, color:C.text, margin:0 }}>{sel.title}</h2>
               <button onClick={()=>setSel(null)} style={{ background:"none",border:"none",cursor:"pointer",color:C.textDim,fontSize:"1rem",padding:"0 0 0 1rem" }}>✕</button>
@@ -521,7 +528,7 @@ function FacadeDesigns() {
                   transform:exp?`translateX(${i*15}px) translateY(${i*-8}px)`:"none", opacity:exp?1:0.82,
                   transition:`transform ${0.26+i*0.06}s ease, opacity .3s`, display:"flex",alignItems:"center",gap:"1rem" }}>
                   <span style={{ fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.15em", color:C.gold, minWidth:18, textAlign:"right" }}>{String(i+1).padStart(2,"0")}</span>
-                  <span style={{ fontFamily:F.ui, fontSize:"0.8rem", letterSpacing:"0.06em", textTransform:"uppercase", color:"rgba(237,232,223,0.82)" }}>{layer}</span>
+                  <span style={{ fontFamily:F.ui, fontSize:"0.8rem", letterSpacing:"0.06em", textTransform:"uppercase", color:"rgba(21,21,21,0.72)" }}>{layer}</span>
                 </div>
               ))}
             </div>
@@ -553,7 +560,7 @@ function MasonryGrid({ photos }) {
             return (
               <div key={pi} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
                 style={{ position:"relative", overflow:"hidden", cursor:"pointer",
-                  background:"rgba(255,255,255,0.03)",
+                  background:"rgba(21,21,21,0.035)",
                   outline: hov ? `1px solid rgba(196,166,110,0.4)` : "1px solid transparent",
                   transition:"outline .25s" }}>
                 <img src={photo.src} alt={photo.alt} onLoad={()=>setLoaded(true)}
@@ -563,7 +570,7 @@ function MasonryGrid({ photos }) {
                     transition:"opacity .4s ease, transform .4s ease" }}/>
                 {!loaded && (
                   <div style={{ position:"absolute", inset:0, aspectRatio:"4/3",
-                    background:"rgba(255,255,255,0.03)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                    background:"rgba(21,21,21,0.035)", display:"flex", alignItems:"center", justifyContent:"center" }}>
                     <span style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.15em", color:"rgba(196,166,110,0.2)", textTransform:"uppercase" }}>loading</span>
                   </div>
                 )}
@@ -613,7 +620,7 @@ function Contact() {
           { label:"Studio", note:"Commercial photography & other business enquiries",
             links:[{ text:"contact@bqlstudio.com", href:"mailto:contact@bqlstudio.com" }]},
         ].map(card=>(
-          <div key={card.label} style={{ padding:"2rem", border:`1px solid ${C.border}`, background:"rgba(255,255,255,0.02)", textAlign:"center" }}>
+          <div key={card.label} style={{ padding:"2rem", border:`1px solid ${C.border}`, background:"rgba(21,21,21,0.018)", textAlign:"center" }}>
             <p style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", color:C.gold, margin:"0 0 0.55rem" }}>{card.label}</p>
             <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.88rem", color:C.textDim, margin:"0 0 1.5rem" }}>{card.note}</p>
             <Rule/>
@@ -643,7 +650,7 @@ function ChatWidget() {
       <button onClick={()=>setOpen(o=>!o)} style={{ position:"fixed",bottom:28,right:28,zIndex:55,
         width:50,height:50,borderRadius:"50%",background:C.gold,border:"none",cursor:"pointer",
         display:"flex",alignItems:"center",justifyContent:"center",
-        boxShadow:"0 4px 24px rgba(0,0,0,0.5)",transition:"transform .2s",
+        boxShadow:"0 4px 24px rgba(0,0,0,0.16)",transition:"transform .2s",
         fontFamily:F.ui, fontSize:"1rem", color:C.bg }}
         onMouseEnter={e=>e.currentTarget.style.transform="scale(1.1)"}
         onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
@@ -651,19 +658,19 @@ function ChatWidget() {
       </button>
       <div style={{ position:"fixed",bottom:88,right:28,zIndex:55,
         width:"clamp(275px,88vw,365px)", maxHeight:open?"460px":"0", overflow:"hidden",
-        transition:"max-height .4s ease", boxShadow:"0 8px 40px rgba(0,0,0,0.6)" }}>
-        <div style={{ background:"#0f0e0c", border:`1px solid rgba(196,166,110,0.28)`, display:"flex",flexDirection:"column",height:460 }}>
+        transition:"max-height .4s ease", boxShadow:"0 8px 40px rgba(0,0,0,0.18)" }}>
+        <div style={{ background:"#ffffff", border:`1px solid rgba(166,132,75,0.28)`, display:"flex",flexDirection:"column",height:460 }}>
           <div style={{ padding:"1rem 1.25rem", borderBottom:`1px solid rgba(196,166,110,0.1)` }}>
             <p style={{ fontFamily:F.ui, fontSize:"0.65rem", letterSpacing:"0.18em", textTransform:"uppercase", color:C.gold, margin:0 }}>Studio Assistant</p>
             <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.78rem", color:C.textDim, margin:"0.15rem 0 0" }}>Ask me about any project</p>
           </div>
           <div style={{ flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"1.5rem" }}>
-            <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.85rem", color:"rgba(237,232,223,0.24)", textAlign:"center", lineHeight:1.75 }}>
+            <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.85rem", color:"rgba(21,21,21,0.28)", textAlign:"center", lineHeight:1.75 }}>
               AI integration coming soon.<br/>I'll answer questions<br/>about any project here.
             </p>
           </div>
           <div style={{ padding:"1rem 1.25rem", borderTop:`1px solid rgba(196,166,110,0.08)`, display:"flex",gap:"0.5rem" }}>
-            <input placeholder="Ask about a project..." disabled style={{ flex:1, background:"rgba(255,255,255,0.04)", border:`1px solid rgba(196,166,110,0.16)`, color:C.text, fontFamily:F.ui, fontSize:"0.8rem", letterSpacing:"0.05em", padding:"8px 12px", outline:"none" }}/>
+            <input placeholder="Ask about a project..." disabled style={{ flex:1, background:"rgba(21,21,21,0.035)", border:`1px solid rgba(166,132,75,0.16)`, color:C.text, fontFamily:F.ui, fontSize:"0.8rem", letterSpacing:"0.05em", padding:"8px 12px", outline:"none" }}/>
             <button disabled style={{ background:"rgba(196,166,110,0.22)",border:"none", color:C.gold, padding:"8px 14px", fontFamily:F.ui, fontSize:"0.7rem", letterSpacing:"0.15em", cursor:"not-allowed" }}>→</button>
           </div>
         </div>
@@ -677,31 +684,39 @@ export default function App() {
   const [project, setProject] = useState(null);
   const [menu,    setMenu]    = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [detailViewer, setDetailViewer] = useState(null);
 
   useEffect(()=>{ const t=setTimeout(()=>setMounted(true),80); return()=>clearTimeout(t); },[]);
 
   const navigate      = p => { setProject(null); setPage(p); setMenu(false); window.scrollTo({top:0,behavior:"smooth"}); };
   const openProject   = p => { setProject(p); setPage("Work Samples"); window.scrollTo({top:0,behavior:"smooth"}); };
   const switchProject = p => { setProject(p); window.scrollTo({top:0,behavior:"smooth"}); };
+  const openDetailViewer = id => setDetailViewer(id);
+  const closeDetailViewer = () => setDetailViewer(null);
 
   return (
     <>
       <style>{FONT_IMPORT}</style>
       <div style={{ minHeight:"100vh",
-        background:"linear-gradient(180deg, #080807 0%, #0d0d0d 30%, #131313 60%, #1a1a1a 82%, #242424 100%)",
+        background:"#ffffff",
         opacity:mounted?1:0, transition:"opacity .5s ease" }}>
         <Grain/>
         <NavBar currentPage={page} currentProject={project} onNavigate={navigate} menu={menu} setMenu={setMenu}/>
         {project ? (
-          <ProjectViewer project={project} onSwitchProject={switchProject} onNavigate={navigate}/>
+          <ProjectViewer project={project} onSwitchProject={switchProject} onNavigate={navigate} onOpenDetail={openDetailViewer}/>
         ) : (
           <>
             {page===null             && <Home onNavigate={navigate}/>}
-            {page==="Work Samples"   && <WorkSamples onOpenProject={openProject} onNavigate={navigate}/>}
-            {page==="Facade Designs" && <FacadeDesigns/>}
+            {page==="Work Samples"   && <WorkSamples onOpenProject={openProject} onNavigate={navigate} onOpenDetail={openDetailViewer}/>}
+            {page==="Facade Designs" && <FacadeDesigns onOpenDetail={openDetailViewer}/>}
             {page==="Photography"    && <Photography/>}
             {page==="Contact"        && <Contact/>}
           </>
+        )}
+        {detailViewer==="corita" && (
+          <div style={{ position:"fixed", inset:0, zIndex:80 }}>
+            <CoritaDetailViewer onClose={closeDetailViewer}/>
+          </div>
         )}
         <ChatWidget/>
       </div>
