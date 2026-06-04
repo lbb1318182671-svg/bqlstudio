@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import FacadeViewer from "./FacadeViewer";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap');
@@ -21,7 +22,6 @@ const C = {
 };
 const F = { display:"'Jost', sans-serif", ui:"'Jost', sans-serif" };
 
-/* ─── PROJECT DATA ───────────────────────────────────────────────────────── */
 const PROJECTS = [
   { id:"01", title:"The Enfolding", subtitle:"Corita Kent Art Center",
     type:"Art foundation building", year:"Spring 2024", tag:"Individual", location:"Boyle Heights, Los Angeles", hasFacade:true, facadePages:[0,4],
@@ -74,13 +74,12 @@ const PROJECTS = [
 ];
 
 const FACADES = [
-  { id:"F1", title:"/", layers:["Outer Perforated Steel Panel","Air Cavity + Drainage","Rigid Insulation Board","Vapour Control Layer","Structural Concrete Wall","Interior Plaster Finish"] },
+  { id:"F1", title:"The Enfolding — Facade Detail", layers:[] },
   { id:"F2", title:"/", layers:["Double-Glazed Unit (6/16/6)","Aluminium Frame","Thermally Broken Mullion","Fire-Stop Barrier","Spandrel Panel","Interior Finish"] },
   { id:"F3", title:"/", layers:["Facing Brick (100mm)","Open Cavity","Stainless Steel Ties","Breather Membrane","Rigid Insulation","Structural Frame"] },
   { id:"F4", title:"Folded Metal Skin", layers:["Folded Zinc Panel","Sub-Frame Bracket","Thermal Break","Air Barrier","Structural Steel Frame","Interior Lining"] },
 ];
 
-/* ─── HELPERS ────────────────────────────────────────────────────────────── */
 function Rule({ style }) {
   return <div style={{ height:1, background:C.border, ...style }}/>;
 }
@@ -114,7 +113,6 @@ function SectionHeader({ label, title }) {
   );
 }
 
-/* ─── NAV BAR ────────────────────────────────────────────────────────────── */
 function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
   const NAV = ["Work Samples","Facade Designs","Photography","Contact"];
   return (
@@ -126,7 +124,6 @@ function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
         height:58, padding:"0 clamp(1.25rem,4vw,3.5rem)" }}>
         <button onClick={()=>onNavigate(null)} style={{ background:"none",border:"none",
           cursor:"pointer", display:"flex", alignItems:"center", gap:"0.65rem" }}>
-          {/* Replace with: <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto" }} /> */}
           <img src="/logo.png" alt="BQL Studio" style={{ height:32, width:"auto" }} />
           <div style={{ display:"flex", flexDirection:"column", gap:"1px" }}>
             <span style={{ fontFamily:F.ui, fontSize:"0.82rem", letterSpacing:"0.18em", color:C.text, fontWeight:300, textTransform:"uppercase" }}>BQL Studio</span>
@@ -175,7 +172,6 @@ function NavBar({ currentPage, currentProject, onNavigate, menu, setMenu }) {
   );
 }
 
-/* ─── PROJECT INDEX SIDEBAR ──────────────────────────────────────────────── */
 function ProjectIndexSidebar({ currentProject, onSwitchProject, top=58 }) {
   return (
     <div style={{ position:"fixed", left:0, top:top, bottom:0, zIndex:30,
@@ -216,7 +212,6 @@ function ProjectIndexItem({ project, isCurrent, onSwitch }) {
   );
 }
 
-/* ─── PROJECT VIEWER ─────────────────────────────────────────────────────── */
 function ProjectViewer({ project, onSwitchProject, onNavigate }) {
   const [idx, setIdx] = useState(0);
   const total = project.images.length;
@@ -240,22 +235,17 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
   const nextP = PROJECTS[pi+1]??null;
 
   const SB = "clamp(48px,5.5vw,64px)";
-  const BH = "clamp(118px,18vh,148px)";  // ← slightly smaller bottom bar
+  const BH = "clamp(118px,18vh,148px)";
   const TOP = 86;
 
   return (
-    // FIX 3: white background for project viewer
     <div style={{ minHeight:"100vh", background:C.bg }} {...swipe}>
-
       <ProjectIndexSidebar currentProject={project} onSwitchProject={onSwitchProject} top={TOP}/>
-
-      {/* ── IMAGE AREA — all slides same layout ── */}
       <div style={{ marginLeft:SB, paddingTop:TOP, paddingBottom:BH,
         minHeight:"100vh", display:"flex", alignItems:"flex-start",
         justifyContent:"center", position:"relative",
         background:"#ffffff",
         paddingTop:`calc(${TOP}px + 0.25rem)` }}>
-
         <div style={{ width:"100%", display:"flex", alignItems:"center",
           justifyContent:"center",
           padding:"clamp(0.25rem,1vw,0.75rem) clamp(2.5rem,7vw,5.5rem)" }}>
@@ -271,14 +261,10 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
               <span style={{ fontFamily:F.display, fontSize:"clamp(2.5rem,6vw,4.5rem)",
                 color:"rgba(196,166,110,0.3)", fontWeight:300 }}>{project.id}</span>
               <span style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.2em",
-                textTransform:"uppercase", color:"rgba(0,0,0,0.3)" }}>
-                {idx+1} / {total}
-              </span>
+                textTransform:"uppercase", color:"rgba(0,0,0,0.3)" }}>{idx+1} / {total}</span>
             </div>
           )}
         </div>
-
-        {/* Side arrows */}
         {[
           { side:"left", fn:prev, disabled:idx===0 },
           { side:"right", fn:next, disabled:idx===total-1 },
@@ -293,24 +279,17 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
           </button>
         ))}
       </div>
-
-      {/* ── BOTTOM BAR ── */}
       <div style={{ position:"fixed", bottom:0, left:SB, right:0, zIndex:30,
         background:"rgba(8,8,7,0.96)", backdropFilter:"blur(18px)",
         borderTop:`1px solid ${C.border}`,
         padding:"0.5rem clamp(1.5rem,5vw,4rem) 0.8rem" }}>
-
-        {/* Caption */}
         <p style={{ fontFamily:F.display, fontStyle:"italic",
           fontSize:"clamp(0.7rem,1.4vw,0.88rem)",
           color:C.textDim, textAlign:"center", lineHeight:1.6,
           marginBottom:"0.5rem", minHeight:"1.3em" }}>
           {project.captions[idx]||""}
         </p>
-
         <Rule style={{ marginBottom:"0.5rem" }}/>
-
-        {/* Controls row */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"0.5rem" }}>
           <button onClick={prevP?()=>onSwitchProject(prevP):undefined}
             style={{ background:"none", border:"none", cursor:prevP?"pointer":"default",
@@ -320,7 +299,6 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
             onMouseLeave={e=>{ if(prevP) e.currentTarget.style.color=C.textDim; }}>
             ← {prevP?`${prevP.id} ${prevP.title}`:""}
           </button>
-
           <div style={{ display:"flex", alignItems:"center", gap:"0.28rem", flexWrap:"wrap", justifyContent:"center" }}>
             <button onClick={prev} disabled={idx===0}
               style={{ background:"none",border:"none",cursor:idx===0?"default":"pointer",
@@ -339,7 +317,6 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
                 fontFamily:F.ui, fontSize:"0.62rem", color:idx===total-1?C.goldDim:C.textDim,
                 padding:"2px 5px", transition:"color .2s" }}>Next</button>
           </div>
-
           <button onClick={nextP?()=>onSwitchProject(nextP):undefined}
             style={{ background:"none", border:"none", cursor:nextP?"pointer":"default",
               fontFamily:F.ui, fontSize:"0.54rem", letterSpacing:"0.14em", textTransform:"uppercase",
@@ -349,8 +326,6 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
             {nextP?`${nextP.id} ${nextP.title}`:""} →
           </button>
         </div>
-
-        {/* subtitle row with View Facade Detail button on the far right */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:"0.35rem" }}>
           <div style={{ flex:1 }}/>
           <p style={{ fontFamily:F.display, fontSize:"clamp(0.62rem,1.2vw,0.76rem)",
@@ -380,7 +355,6 @@ function ProjectViewer({ project, onSwitchProject, onNavigate }) {
   );
 }
 
-/* ─── HOME ───────────────────────────────────────────────────────────────── */
 function Home({ onNavigate }) {
   const [vis, setVis] = useState(false);
   useEffect(()=>{ const t=setTimeout(()=>setVis(true),80); return()=>clearTimeout(t); },[]);
@@ -389,16 +363,9 @@ function Home({ onNavigate }) {
     <div style={{ opacity:vis?1:0, transform:vis?"none":"translateY(14px)", transition:"opacity .7s ease, transform .7s ease" }}>
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
         <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:68 }}>
-          {/* Replace with: <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(48px,7vw,72px)", width:"auto", marginBottom:"clamp(1rem,2.5vh,2rem)" }} /> */}
           <div style={{ display:"flex", justifyContent:"center", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }}>
-             <img src="/logo.png" alt="BQL Studio" 
-              style={{ 
-              height:"clamp(60px,6vw,96px)", 
-              width:"auto",
-              maxWidth:"clamp(120px,15vw,180px)",
-              objectFit:"contain",
-          }} />
-</div>
+            <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(60px,6vw,96px)", width:"auto", maxWidth:"clamp(120px,15vw,180px)", objectFit:"contain" }} />
+          </div>
           <p style={{ fontFamily:F.ui, fontSize:"0.63rem", letterSpacing:"0.26em", textTransform:"uppercase", color:C.gold, marginBottom:"2rem" }}>
             Architecture &amp; Photography — bqlstudio.com
           </p>
@@ -436,7 +403,6 @@ function Home({ onNavigate }) {
   );
 }
 
-/* ─── WORK SAMPLES ───────────────────────────────────────────────────────── */
 function WorkSamples({ onOpenProject, onNavigate }) {
   return (
     <div style={{ padding:"clamp(2rem,8vw,6rem)", paddingTop:100 }}>
@@ -493,10 +459,17 @@ function ProjectCard({ project, onOpen, onFacade }) {
 
 /* ─── FACADE DESIGNS ─────────────────────────────────────────────────────── */
 function FacadeDesigns() {
-  const [sel,setSel] = useState(null);
-  const [exp,setExp] = useState(false);
+  const [showViewer, setShowViewer] = useState(false);
+  const [sel, setSel] = useState(null);
+  const [exp, setExp] = useState(false);
   return (
     <div style={{ padding:"clamp(2rem,8vw,6rem)", paddingTop:100 }}>
+      {/* 3D viewer overlay — opens when F1 card is clicked */}
+      {showViewer && (
+        <div style={{ position:"fixed", inset:0, zIndex:80 }}>
+          <FacadeViewer onClose={()=>setShowViewer(false)}/>
+        </div>
+      )}
       <SectionHeader label="02" title="Facade Designs"/>
       <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.92rem", color:C.textDim, margin:"1rem 0 clamp(2rem,5vw,3.5rem)" }}>
         Click a facade to explore the material schedule.
@@ -505,7 +478,8 @@ function FacadeDesigns() {
         {FACADES.map(f=>{
           const [hov,setHov]=useState(false);
           return (
-            <div key={f.id} onClick={()=>{ setSel(f); setExp(false); }}
+            <div key={f.id}
+              onClick={()=>{ if(f.id==="F1"){ setShowViewer(true); } else { setSel(f); setExp(false); } }}
               onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
               style={{ border:`1px solid ${hov?"rgba(196,166,110,0.5)":C.border}`, cursor:"pointer", padding:"2rem",
                 background:hov?"rgba(196,166,110,0.03)":"rgba(255,255,255,0.02)", transition:"all .3s", transform:hov?"translateY(-4px)":"none" }}>
@@ -519,12 +493,17 @@ function FacadeDesigns() {
                 <span style={{ position:"relative",zIndex:1,fontFamily:F.ui,fontSize:"0.56rem",letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(196,166,110,0.38)" }}>{f.id}</span>
               </div>
               <h3 style={{ fontFamily:F.display, fontSize:"1rem", fontWeight:300, color:C.text, margin:"0 0 0.4rem" }}>{f.title}</h3>
-              <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>{f.layers.length} Layers</p>
+              {f.layers.length > 0 && (
+                <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>{f.layers.length} Layers</p>
+              )}
+              {f.id==="F1" && (
+                <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>3D Interactive</p>
+              )}
             </div>
           );
         })}
       </div>
-      {sel && (
+      {sel && sel.layers.length > 0 && (
         <div onClick={()=>setSel(null)} style={{ position:"fixed",inset:0,zIndex:60,background:"rgba(4,4,3,0.9)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"clamp(1rem,5vw,3rem)" }}>
           <div onClick={e=>e.stopPropagation()} style={{ background:"#0f0e0c", border:`1px solid rgba(196,166,110,0.28)`, maxWidth:540, width:"100%", padding:"clamp(1.5rem,5vw,3rem)" }}>
             <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start" }}>
@@ -553,16 +532,12 @@ function FacadeDesigns() {
   );
 }
 
-/* ─── PHOTOGRAPHY ────────────────────────────────────────────────────────── */
 const ARCH_PHOTOS = Array.from({length:17}, (_,i) => ({
   src: `/images/photography/architecture/${i+1}.jpg`,
   alt: `Architecture ${i+1}`,
 }));
 
-const COMM_PHOTOS = [
-  // Add commercial photos here when ready:
-  // { src:"/images/photography/commercial/1.jpg", alt:"Commercial 1" },
-];
+const COMM_PHOTOS = [];
 
 function MasonryGrid({ photos }) {
   const cols = 3;
@@ -625,7 +600,6 @@ function Photography() {
   );
 }
 
-/* ─── CONTACT ────────────────────────────────────────────────────────────── */
 function Contact() {
   return (
     <div style={{ minHeight:"100vh", padding:"clamp(2rem,8vw,6rem)", paddingTop:100,
@@ -662,7 +636,6 @@ function Contact() {
   );
 }
 
-/* ─── CHAT WIDGET ────────────────────────────────────────────────────────── */
 function ChatWidget() {
   const [open,setOpen] = useState(false);
   return (
@@ -699,7 +672,6 @@ function ChatWidget() {
   );
 }
 
-/* ─── ROOT ───────────────────────────────────────────────────────────────── */
 export default function App() {
   const [page,    setPage]    = useState(null);
   const [project, setProject] = useState(null);
