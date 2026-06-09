@@ -3,8 +3,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { BONES_AND_SCALES_MODEL_URL } from "./modelUrls";
 
-const MODEL_URL = "/models/bonesandscales.glb";
+const MODEL_URL = BONES_AND_SCALES_MODEL_URL;
 const C_GOLD = "#c4a66e";
 const F = "'Jost', sans-serif";
 

@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { BONES_AND_SCALES_MODEL_URL } from "./modelUrls";
 
 const HERO_MODELS = [
   {
@@ -14,7 +15,7 @@ const HERO_MODELS = [
   },
   {
     id: "bones-scales",
-    url: "/models/bonesandscales.glb",
+    url: BONES_AND_SCALES_MODEL_URL,
     position: [2.0, 0.02, 0],
     frontCorrection: [0, 0, 0],
     targetHeight: 1.87,
