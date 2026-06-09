@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import CoritaDetailViewer from "./CoritaDetailViewer";
 import BonesScalesDetailViewer from "./BonesScalesDetailViewer";
+import HeroFacadeBackground from "./HeroFacadeBackground";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap');
@@ -104,7 +105,7 @@ function useSwipe(onLeft, onRight) {
     },
   };
 }
-function SectionHeader({ label, title }) {
+function SectionHeader({ title }) {
   return (
     <div>
       <h2 style={{ fontFamily:F.display, fontSize:"clamp(1.2rem,2.5vw,1.8rem)",
@@ -228,8 +229,6 @@ function ProjectViewer({ project, onSwitchProject, onNavigate, onOpenDetail }) {
     return()=>window.removeEventListener("keydown",h);
   },[prev,next]);
 
-  useEffect(()=>setIdx(0),[project.id]);
-
   const swipe = useSwipe(next, prev);
   const pi = PROJECTS.findIndex(p=>p.id===project.id);
   const prevP = PROJECTS[pi-1]??null;
@@ -242,7 +241,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate, onOpenDetail }) {
   return (
     <div style={{ minHeight:"100vh", background:C.bg }} {...swipe}>
       <ProjectIndexSidebar currentProject={project} onSwitchProject={onSwitchProject} top={TOP}/>
-      <div style={{ marginLeft:SB, paddingTop:TOP, paddingBottom:BH,
+      <div style={{ marginLeft:SB, paddingBottom:BH,
         minHeight:"100vh", display:"flex", alignItems:"flex-start",
         justifyContent:"center", position:"relative",
         background:"#ffffff",
@@ -362,8 +361,10 @@ function Home({ onNavigate }) {
   const NAV = ["Work Samples","Facade Designs","Photography","Contact"];
   return (
     <div style={{ opacity:vis?1:0, transform:vis?"none":"translateY(14px)", transition:"opacity .7s ease, transform .7s ease" }}>
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0 }}>
-        <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:68 }}>
+      <div className="home-hero-shell" style={{ minHeight:"100vh", display:"flex", flexDirection:"column", padding:"clamp(1.5rem,4vw,3rem)", paddingTop:0, paddingBottom:0, position:"relative", overflow:"hidden" }}>
+        <HeroFacadeBackground/>
+        <div className="home-hero-haze"/>
+        <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center", paddingTop:68, position:"relative", zIndex:2, pointerEvents:"none" }}>
           <div style={{ display:"flex", justifyContent:"center", marginBottom:"clamp(1.8rem,4.5vh,3.2rem)" }}>
             <img src="/logo.png" alt="BQL Studio" style={{ height:"clamp(60px,6vw,96px)", width:"auto", maxWidth:"clamp(120px,15vw,180px)", objectFit:"contain", filter:"invert(1)" }} />
           </div>
@@ -379,28 +380,32 @@ function Home({ onNavigate }) {
             Architectural design, facade research, and spatial photography.
           </p>
         </div>
-        <div style={{ paddingBottom:"clamp(3rem,7vh,5rem)" }}>
+        <div style={{ paddingBottom:"clamp(3rem,7vh,5rem)", position:"relative", zIndex:3 }}>
           <div style={{ height:"clamp(1rem,2.5vh,2rem)" }}/>
           <Rule/>
           <div style={{ height:"clamp(2rem,5vh,3.5rem)" }}/>
           <nav style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(160px,1fr))", gap:"clamp(0.5rem,2vw,1.5rem)" }}>
-            {NAV.map((item,i)=>{
-              const [hov,setHov] = useState(false);
-              return (
-                <button key={item} onClick={()=>onNavigate(item)}
-                  onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-                  style={{ background:"none", border:"none", cursor:"pointer", textAlign:"left", padding:"0.9rem 0",
-                    borderTop:`1px solid ${hov ? C.gold : C.border}`, transition:"border-color .3s" }}>
-                  <span style={{ fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.22em", textTransform:"uppercase", color:C.gold, display:"block", marginBottom:"0.35rem" }}>0{i+1}</span>
-                  <span style={{ fontFamily:F.display, fontSize:"1.05rem", fontWeight:300, color:C.text }}>{item}</span>
-                </button>
-              );
-            })}
+            {NAV.map((item,i)=>(
+              <HomeNavButton key={item} item={item} index={i} onNavigate={onNavigate}/>
+            ))}
           </nav>
           <div style={{ height:"clamp(0.75rem,2vh,1.5rem)" }}/>
         </div>
       </div>
     </div>
+  );
+}
+
+function HomeNavButton({ item, index, onNavigate }) {
+  const [hov,setHov] = useState(false);
+  return (
+    <button onClick={()=>onNavigate(item)}
+      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
+      style={{ background:"none", border:"none", cursor:"pointer", textAlign:"left", padding:"0.9rem 0",
+        borderTop:`1px solid ${hov ? C.gold : C.border}`, transition:"border-color .3s" }}>
+      <span style={{ fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.22em", textTransform:"uppercase", color:C.gold, display:"block", marginBottom:"0.35rem" }}>0{index+1}</span>
+      <span style={{ fontFamily:F.display, fontSize:"1.05rem", fontWeight:300, color:C.text }}>{item}</span>
+    </button>
   );
 }
 
@@ -464,6 +469,53 @@ function ProjectCard({ project, onOpen, onFacade }) {
 }
 
 /* ─── FACADE DESIGNS ─────────────────────────────────────────────────────── */
+function FacadeDesignCard({ facade, onOpenDetail, onSelect }) {
+  const [hov,setHov]=useState(false);
+  const openFacade = () => {
+    if(facade.id==="F1"){
+      onOpenDetail("corita");
+    } else if(facade.id==="F2"){
+      onOpenDetail("bones-scales");
+    } else {
+      onSelect(facade);
+    }
+  };
+
+  return (
+    <div
+      onClick={openFacade}
+      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
+      style={{ border:`1px solid ${hov?"rgba(196,166,110,0.5)":C.border}`, cursor:"pointer", padding:"2rem",
+        background:hov?"rgba(166,132,75,0.045)":"rgba(21,21,21,0.018)", transition:"all .3s", transform:hov?"translateY(-4px)":"none" }}>
+      <div style={{ aspectRatio:"3/2", marginBottom:"1.5rem", background:"rgba(21,21,21,0.035)",
+        position:"relative", overflow:"hidden", display:"flex",alignItems:"center",justifyContent:"center" }}>
+        {facade.cover ? (
+          <img src={facade.cover} alt={facade.title} style={{
+            width:"100%", height:"100%", objectFit:"cover", display:"block",
+            transform:hov?"scale(1.025)":"scale(1)", transition:"transform .35s ease"
+          }}/>
+        ) : (
+          <>
+            {[0,1,2,3].map(i=>(
+              <div key={i} style={{ position:"absolute",left:`${8+i*22}%`,top:"12%",bottom:"12%",width:"18%",
+                background:`rgba(196,166,110,${0.07+i*0.04})`, border:`1px solid rgba(196,166,110,0.14)`,
+                transform:hov?`translateY(${i%2===0?-7:5}px)`:"none", transition:`transform ${0.28+i*0.05}s ease` }}/>
+            ))}
+            <span style={{ position:"relative",zIndex:1,fontFamily:F.ui,fontSize:"0.56rem",letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(196,166,110,0.38)" }}>{facade.id}</span>
+          </>
+        )}
+      </div>
+      <h3 style={{ fontFamily:F.display, fontSize:"1rem", fontWeight:300, color:C.text, margin:"0 0 0.4rem" }}>{facade.title}</h3>
+      {facade.layers.length > 0 && (
+        <p style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.18em", color:C.gold, textTransform:"uppercase", margin:0 }}>{facade.layers.length} Layers</p>
+      )}
+      {(facade.id==="F1" || facade.id==="F2") && (
+        <p style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.18em", color:C.gold, textTransform:"uppercase", margin:0 }}>3D Interactive</p>
+      )}
+    </div>
+  );
+}
+
 function FacadeDesigns({ onOpenDetail }) {
   const [sel, setSel] = useState(null);
   const [exp, setExp] = useState(false);
@@ -474,42 +526,14 @@ function FacadeDesigns({ onOpenDetail }) {
         Click a facade to explore the material schedule.
       </p>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(min(100%,240px),1fr))", gap:"clamp(1rem,3vw,2rem)" }}>
-        {FACADES.map(f=>{
-          const [hov,setHov]=useState(false);
-          return (
-            <div key={f.id}
-              onClick={()=>{ if(f.id==="F1"){ onOpenDetail("corita"); } else if(f.id==="F2"){ onOpenDetail("bones-scales"); } else { setSel(f); setExp(false); } }}
-              onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-              style={{ border:`1px solid ${hov?"rgba(196,166,110,0.5)":C.border}`, cursor:"pointer", padding:"2rem",
-                background:hov?"rgba(166,132,75,0.045)":"rgba(21,21,21,0.018)", transition:"all .3s", transform:hov?"translateY(-4px)":"none" }}>
-              <div style={{ aspectRatio:"3/2", marginBottom:"1.5rem", background:"rgba(21,21,21,0.035)",
-                position:"relative", overflow:"hidden", display:"flex",alignItems:"center",justifyContent:"center" }}>
-                {f.cover ? (
-                  <img src={f.cover} alt={f.title} style={{
-                    width:"100%", height:"100%", objectFit:"cover", display:"block",
-                    transform:hov?"scale(1.025)":"scale(1)", transition:"transform .35s ease"
-                  }}/>
-                ) : (
-                  <>
-                    {[0,1,2,3].map(i=>(
-                      <div key={i} style={{ position:"absolute",left:`${8+i*22}%`,top:"12%",bottom:"12%",width:"18%",
-                        background:`rgba(196,166,110,${0.07+i*0.04})`, border:`1px solid rgba(196,166,110,0.14)`,
-                        transform:hov?`translateY(${i%2===0?-7:5}px)`:"none", transition:`transform ${0.28+i*0.05}s ease` }}/>
-                    ))}
-                    <span style={{ position:"relative",zIndex:1,fontFamily:F.ui,fontSize:"0.56rem",letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(196,166,110,0.38)" }}>{f.id}</span>
-                  </>
-                )}
-              </div>
-              <h3 style={{ fontFamily:F.display, fontSize:"1rem", fontWeight:300, color:C.text, margin:"0 0 0.4rem" }}>{f.title}</h3>
-              {f.layers.length > 0 && (
-                <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>{f.layers.length} Layers</p>
-              )}
-              {(f.id==="F1" || f.id==="F2") && (
-                <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>3D Interactive</p>
-              )}
-            </div>
-          );
-        })}
+        {FACADES.map(f=>(
+          <FacadeDesignCard
+            key={f.id}
+            facade={f}
+            onOpenDetail={onOpenDetail}
+            onSelect={next=>{ setSel(next); setExp(false); }}
+          />
+        ))}
       </div>
       {sel && sel.layers.length > 0 && (
         <div onClick={()=>setSel(null)} style={{ position:"fixed",inset:0,zIndex:60,background:"rgba(255,255,255,0.86)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"clamp(1rem,5vw,3rem)" }}>
@@ -547,6 +571,30 @@ const ARCH_PHOTOS = Array.from({length:17}, (_,i) => ({
 
 const COMM_PHOTOS = [];
 
+function MasonryPhoto({ photo }) {
+  const [hov, setHov] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
+      style={{ position:"relative", overflow:"hidden", cursor:"pointer",
+        background:"rgba(21,21,21,0.035)",
+        outline: hov ? `1px solid rgba(196,166,110,0.4)` : "1px solid transparent",
+        transition:"outline .25s" }}>
+      <img src={photo.src} alt={photo.alt} onLoad={()=>setLoaded(true)}
+        style={{ width:"100%", height:"auto", display:"block",
+          opacity: loaded ? 1 : 0,
+          transform: hov ? "scale(1.02)" : "scale(1)",
+          transition:"opacity .4s ease, transform .4s ease" }}/>
+      {!loaded && (
+        <div style={{ position:"absolute", inset:0, aspectRatio:"4/3",
+          background:"rgba(21,21,21,0.035)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <span style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.15em", color:"rgba(196,166,110,0.2)", textTransform:"uppercase" }}>loading</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MasonryGrid({ photos }) {
   const cols = 3;
   const columns = Array.from({length:cols}, () => []);
@@ -555,29 +603,7 @@ function MasonryGrid({ photos }) {
     <div style={{ display:"grid", gridTemplateColumns:`repeat(${cols}, 1fr)`, gap:"clamp(0.5rem,1.2vw,1rem)", alignItems:"start" }}>
       {columns.map((col, ci) => (
         <div key={ci} style={{ display:"flex", flexDirection:"column", gap:"clamp(0.5rem,1.2vw,1rem)" }}>
-          {col.map((photo, pi) => {
-            const [hov, setHov] = useState(false);
-            const [loaded, setLoaded] = useState(false);
-            return (
-              <div key={pi} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-                style={{ position:"relative", overflow:"hidden", cursor:"pointer",
-                  background:"rgba(21,21,21,0.035)",
-                  outline: hov ? `1px solid rgba(196,166,110,0.4)` : "1px solid transparent",
-                  transition:"outline .25s" }}>
-                <img src={photo.src} alt={photo.alt} onLoad={()=>setLoaded(true)}
-                  style={{ width:"100%", height:"auto", display:"block",
-                    opacity: loaded ? 1 : 0,
-                    transform: hov ? "scale(1.02)" : "scale(1)",
-                    transition:"opacity .4s ease, transform .4s ease" }}/>
-                {!loaded && (
-                  <div style={{ position:"absolute", inset:0, aspectRatio:"4/3",
-                    background:"rgba(21,21,21,0.035)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                    <span style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.15em", color:"rgba(196,166,110,0.2)", textTransform:"uppercase" }}>loading</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {col.map(photo => <MasonryPhoto key={photo.src} photo={photo}/>)}
         </div>
       ))}
     </div>
@@ -704,7 +730,7 @@ export default function App() {
         <Grain/>
         <NavBar currentPage={page} currentProject={project} onNavigate={navigate} menu={menu} setMenu={setMenu}/>
         {project ? (
-          <ProjectViewer project={project} onSwitchProject={switchProject} onNavigate={navigate} onOpenDetail={openDetailViewer}/>
+          <ProjectViewer key={project.id} project={project} onSwitchProject={switchProject} onNavigate={navigate} onOpenDetail={openDetailViewer}/>
         ) : (
           <>
             {page===null             && <Home onNavigate={navigate}/>}

@@ -55,15 +55,111 @@ body {
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
-  border-inline: 1px solid var(--border);
+  border-inline: 0;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+}
+
+.hero-facade-background {
+  position: absolute;
+  inset: 58px 0 0;
+  z-index: 0;
+  opacity: 0.76;
+  filter: saturate(1.08) contrast(1.1);
+  pointer-events: auto;
+  mask-image: radial-gradient(ellipse 68% 56% at 50% 43%, #000 56%, rgba(0, 0, 0, 0.52) 76%, transparent 100%);
+}
+
+.hero-facade-background canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-facade-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 900ms ease;
+}
+
+.hero-facade-background.is-webgl-loaded .hero-facade-fallback {
+  opacity: 0.025;
+}
+
+.hero-facade-fallback-model {
+  position: absolute;
+  top: 31%;
+  width: min(34vw, 430px);
+  max-height: 54vh;
+  object-fit: contain;
+  opacity: 0.42;
+  filter: saturate(0.92) contrast(1.1);
+  transform:
+    translateY(-50%)
+    perspective(900px)
+    rotateX(var(--fallback-rotate-x, 0deg))
+    rotateY(var(--fallback-rotate-y, 0deg));
+  transition: transform 120ms ease-out;
+  transform-origin: center;
+}
+
+.hero-facade-fallback-model-left {
+  top: 30%;
+  left: 15%;
+}
+
+.hero-facade-fallback-model-right {
+  right: 15%;
+  width: min(30.6vw, 387px);
+}
+
+.home-hero-haze {
+  position: absolute;
+  inset: 18% 18% 34%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 28% 22% at 50% 46%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06) 58%, transparent 78%);
+  backdrop-filter: blur(0.25px);
+}
+
+@media (max-width: 760px) {
+  .hero-facade-background {
+    inset: 58px 0 0;
+    opacity: 0.54;
+    filter: saturate(1.02) contrast(1.08);
+    mask-image: radial-gradient(ellipse 86% 56% at 50% 43%, #000 50%, rgba(0, 0, 0, 0.42) 72%, transparent 100%);
+  }
+
+  .hero-facade-fallback-model {
+    top: 28%;
+    width: min(44vw, 300px);
+    opacity: 0.26;
+  }
+
+  .hero-facade-fallback-model-left {
+    left: 5%;
+  }
+
+  .hero-facade-fallback-model-right {
+    right: 5%;
+    width: min(39.6vw, 270px);
+  }
+
+  .home-hero-haze {
+    inset: 18% 0 26%;
+  }
 }
 
 h1,

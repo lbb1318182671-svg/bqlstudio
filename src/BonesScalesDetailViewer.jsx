@@ -525,6 +525,9 @@ export default function BonesScalesDetailViewer({ onClose }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.88;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.style.filter = "contrast(1.18)";
     mount.appendChild(renderer.domElement);
     s.renderer = renderer;
@@ -536,12 +539,18 @@ export default function BonesScalesDetailViewer({ onClose }) {
     const pmrem = new THREE.PMREMGenerator(renderer);
     const environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
     scene.environment = environment;
-    scene.environmentIntensity = 0.72;
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xe7dcc7, 0.62));
-    const sun = new THREE.DirectionalLight(0xfff3dc, 1.7);
-    sun.position.set(10, 18, 8);
+    scene.environmentIntensity = 0.68;
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xe7dcc7, 0.58));
+    const sun = new THREE.DirectionalLight(0xfff3dc, 1.55);
+    sun.position.set(6, 14, -12);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.bias = -0.00018;
+    sun.shadow.normalBias = 0.028;
+    sun.shadow.radius = 4;
     scene.add(sun);
-    const fill = new THREE.DirectionalLight(0xd8ecff, 0.32);
+    scene.add(sun.target);
+    const fill = new THREE.DirectionalLight(0xd8ecff, 0.26);
     fill.position.set(-8, 6, -10);
     scene.add(fill);
 
@@ -569,6 +578,17 @@ export default function BonesScalesDetailViewer({ onClose }) {
       model.updateMatrixWorld(true);
 
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      sun.position.set(maxDim * 0.35, maxDim * 0.62, -maxDim * 1.05);
+      sun.target.position.set(0, 0, 0);
+      sun.target.updateMatrixWorld();
+      const shadowExtent = maxDim * 0.72;
+      sun.shadow.camera.left = -shadowExtent;
+      sun.shadow.camera.right = shadowExtent;
+      sun.shadow.camera.top = shadowExtent;
+      sun.shadow.camera.bottom = -shadowExtent;
+      sun.shadow.camera.near = maxDim * 0.04;
+      sun.shadow.camera.far = maxDim * 2.2;
+      sun.shadow.camera.updateProjectionMatrix();
       const hitPad = Math.max(maxDim * 0.01, 0.04);
       const motionItems = [];
       const hoverTargets = [];
@@ -593,14 +613,15 @@ export default function BonesScalesDetailViewer({ onClose }) {
         layerMeshes.forEach((mesh, meshIndex) => {
           const useScaleVariation = layerName === "SCALE" && scaleVariationRandom() < 0.72;
           const variationMode = variationModes[meshIndex % variationModes.length];
-          applyLayerMaterial(mesh, layerName, layerName === "SCALE" ? {
+          const scaleMaterialOptions = layerName === "SCALE" ? {
             seed: 311 + meshIndex * 47,
             spacingScale: useScaleVariation ? 0.86 + scaleVariationRandom() * 0.22 : 0.94,
             radiusScale: useScaleVariation ? 0.9 + scaleVariationRandom() * 0.2 : 1.02,
             variationMode: useScaleVariation ? variationMode : "plain",
-          } : undefined);
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
+          } : undefined;
+          applyLayerMaterial(mesh, layerName, scaleMaterialOptions);
+          mesh.castShadow = layerName !== "SCALE";
+          mesh.receiveShadow = layerName !== "BUILDNG";
           mesh.userData.topLayerName = layerName;
         });
         hoverTargets.push(...layerMeshes);
