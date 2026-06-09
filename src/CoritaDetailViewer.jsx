@@ -435,12 +435,29 @@ const TEXTURE = {
     repeat: [1, 9],
     grain: true,
   }),
+  roofZinc: createSurfaceTexture({
+    base: "#b8bec1",
+    accent: "#9aa2a6",
+    seed: 61,
+    repeat: [1, 9],
+    grain: true,
+    speckleCount: 900,
+  }),
   zincRoughness: createSurfaceTexture({
     base: "#c8c8c8",
     accent: "#696969",
     seed: 67,
     repeat: [1, 9],
     grain: true,
+    colorSpace: false,
+  }),
+  roofZincRoughness: createSurfaceTexture({
+    base: "#c8c8c8",
+    accent: "#989898",
+    seed: 67,
+    repeat: [1, 9],
+    grain: true,
+    speckleCount: 900,
     colorSpace: false,
   }),
   meshOpacity: createMeshOpacityTexture(),
@@ -456,6 +473,8 @@ const ORIENTED_TEXTURE = {
   woodRoughnessSlantedBeam: orientTexture(TEXTURE.woodRoughness, [1.2, 5.5], THREE.MathUtils.degToRad(17.4)),
   zincAligned: orientTexture(TEXTURE.zinc, [1, 9], THREE.MathUtils.degToRad(118)),
   zincRoughnessAligned: orientTexture(TEXTURE.zincRoughness, [1, 9], THREE.MathUtils.degToRad(118)),
+  roofZincAligned: orientTexture(TEXTURE.roofZinc, [1, 9], THREE.MathUtils.degToRad(118)),
+  roofZincRoughnessAligned: orientTexture(TEXTURE.roofZincRoughness, [1, 9], THREE.MathUtils.degToRad(118)),
 };
 
 const FRAME_MATERIAL = createTexturedMatte(TEXTURE.frameSpeckle, TEXTURE.frameSpeckleRoughness, 0.76, 0.012);
@@ -511,8 +530,8 @@ const MAT = {
     clearcoatRoughness: 0.72,
     depthWrite: false,
   }),
-  roof_finish: createTexturedMetal(ORIENTED_TEXTURE.zincAligned, ORIENTED_TEXTURE.zincRoughnessAligned, 0.58, 0.64),
-  roof_water: createTexturedMetal(ORIENTED_TEXTURE.zincAligned, ORIENTED_TEXTURE.zincRoughnessAligned, 0.52, 0.7),
+  roof_finish: createTexturedMetal(ORIENTED_TEXTURE.roofZincAligned, ORIENTED_TEXTURE.roofZincRoughnessAligned, 0.58, 0.64),
+  roof_water: createTexturedMetal(ORIENTED_TEXTURE.roofZincAligned, ORIENTED_TEXTURE.roofZincRoughnessAligned, 0.52, 0.7),
   roof_panel: createMatte(0x26314a, 0.65),
   roof_slab: createTexturedMatte(TEXTURE.timber, TEXTURE.woodRoughness, 0.8),
   roof_board: createTexturedMatte(TEXTURE.plywood, TEXTURE.woodRoughness, 0.82),
@@ -749,12 +768,13 @@ function createThermalOverlayMaterial({
         float positiveZ = smoothstep(-uFadeDistance, uFadeDistance, localPosition.z);
         float positiveOctant = positiveX * positiveY * positiveZ;
         float facadeProximity = 1.0 - smoothstep(uOrigin.x, uInteriorMaxX, vWorldPosition.x);
+        float nearWindowWeight = mix(0.18, 1.0, pow(facadeProximity, 1.8));
         float upwardFacing = smoothstep(0.5, 0.9, dot(normal, vec3(0.0, 1.0, 0.0)));
         float downwardFacing = smoothstep(0.62, 0.94, dot(normal, vec3(0.0, -1.0, 0.0)));
         float inwardFacing = smoothstep(0.18, 0.82, dot(normal, vec3(1.0, 0.0, 0.0)));
         float sunFacing = dot(normal, normalize(uSunDirection));
-        float directSurface = smoothstep(-0.35, 0.65, sunFacing);
-        float strictDirectSurface = smoothstep(0.05, 0.68, sunFacing);
+        float directSurface = smoothstep(-0.08, 0.7, sunFacing);
+        float strictDirectSurface = smoothstep(0.14, 0.72, sunFacing);
         float zSection = smoothstep(0.55, 0.9, abs(normal.z));
         float sideBoundary = min(
           smoothstep(0.0, uFadeDistance, vWorldPosition.z - uBoundsMin.z),
@@ -766,19 +786,24 @@ function createThermalOverlayMaterial({
 
         float surfaceVisibility = upwardFacing;
         float materialHeatWeight = 1.0;
+        float depthWeight = nearWindowWeight;
         if (uMode > 1.5 && uMode < 2.5) {
           surfaceVisibility = upwardFacing * 0.28;
           materialHeatWeight = 0.38;
+          depthWeight = mix(0.26, 1.0, pow(facadeProximity, 1.6));
         } else if (uMode > 2.5 && uMode < 3.5) {
           surfaceVisibility = max(upwardFacing * 0.28, inwardFacing * 0.46);
           materialHeatWeight = 0.52;
+          depthWeight = mix(0.34, 1.0, pow(facadeProximity, 1.4));
         } else if (uMode > 3.5 && uMode < 4.5) {
           surfaceVisibility = max(upwardFacing * directSurface * 0.52, directSurface * 0.82) *
             mix(0.42, 1.0, sideBoundary);
-          materialHeatWeight = 0.72;
+          materialHeatWeight = 1.296;
+          depthWeight = mix(0.36, 1.0, pow(facadeProximity, 1.35));
         } else if (uMode > 4.5) {
           surfaceVisibility = ductOutside * strictDirectSurface;
-          materialHeatWeight = 0.42;
+          materialHeatWeight = 0.756;
+          depthWeight = mix(0.38, 1.0, pow(facadeProximity, 1.2));
         }
 
         surfaceVisibility *= (1.0 - downwardFacing);
@@ -787,8 +812,8 @@ function createThermalOverlayMaterial({
         if (uMode > 3.5) {
           sunlightWeight = mix(0.08, 1.0, uExposure);
         }
-        float variation = mix(0.9, 1.1, heatNoise(floor(vWorldPosition * 3.4)));
-        float heat = positiveOctant * surfaceVisibility * mix(0.5, 1.0, facadeProximity) *
+        float variation = mix(0.96, 1.04, heatNoise(floor(vWorldPosition * 3.4)));
+        float heat = positiveOctant * surfaceVisibility * depthWeight *
           materialHeatWeight * sunlightWeight * airflowReduction * uHeat * variation;
         vec3 warm = mix(vec3(1.0, 0.54, 0.16), vec3(1.0, 0.12, 0.035), smoothstep(0.18, 0.9, heat));
         gl_FragColor = vec4(warm, clamp(heat * 1.624, 0.0, 0.98));

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import CoritaDetailViewer from "./CoritaDetailViewer";
+import BonesScalesDetailViewer from "./BonesScalesDetailViewer";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap');
@@ -74,8 +75,8 @@ const PROJECTS = [
 ];
 
 const FACADES = [
-  { id:"F1", title:"The Enfolding — Facade Detail", cover:"/images/corita-detail-cover.svg", layers:[] },
-  { id:"F2", title:"/", layers:["Double-Glazed Unit (6/16/6)","Aluminium Frame","Thermally Broken Mullion","Fire-Stop Barrier","Spandrel Panel","Interior Finish"] },
+  { id:"F1", title:"The Enfolding — Facade Detail", cover:"/images/coritafacade.png", layers:[] },
+  { id:"F2", title:"The Bones and Scales — Facade Detail", cover:"/images/bonesandscales.png", layers:[] },
   { id:"F3", title:"/", layers:["Facing Brick (100mm)","Open Cavity","Stainless Steel Ties","Breather Membrane","Rigid Insulation","Structural Frame"] },
   { id:"F4", title:"Folded Metal Skin", layers:["Folded Zinc Panel","Sub-Frame Bracket","Thermal Break","Air Barrier","Structural Steel Frame","Interior Lining"] },
 ];
@@ -338,7 +339,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate, onOpenDetail }) {
           </p>
           <div style={{ flex:1, display:"flex", justifyContent:"flex-end" }}>
             {project.hasFacade && project.facadePages?.includes(idx) && (
-              <button onClick={()=>project.id==="01" ? onOpenDetail("corita") : onNavigate("Facade Designs")} style={{
+              <button onClick={()=>project.id==="01" ? onOpenDetail("corita") : project.id==="02" ? onOpenDetail("bones-scales") : onNavigate("Facade Designs")} style={{
                 background:"none", border:`1px solid rgba(196,166,110,0.45)`,
                 color:C.gold, fontFamily:F.ui, fontSize:"0.58rem", letterSpacing:"0.16em",
                 textTransform:"uppercase", padding:"3px 12px", cursor:"pointer", transition:"all .2s",
@@ -414,7 +415,7 @@ function WorkSamples({ onOpenProject, onNavigate, onOpenDetail }) {
             key={p.id}
             project={p}
             onOpen={()=>onOpenProject(p)}
-            onFacade={()=>p.id==="01" ? onOpenDetail("corita") : onNavigate("Facade Designs")}
+            onFacade={()=>p.id==="01" ? onOpenDetail("corita") : p.id==="02" ? onOpenDetail("bones-scales") : onNavigate("Facade Designs")}
           />
         ))}
       </div>
@@ -477,7 +478,7 @@ function FacadeDesigns({ onOpenDetail }) {
           const [hov,setHov]=useState(false);
           return (
             <div key={f.id}
-              onClick={()=>{ if(f.id==="F1"){ onOpenDetail("corita"); } else { setSel(f); setExp(false); } }}
+              onClick={()=>{ if(f.id==="F1"){ onOpenDetail("corita"); } else if(f.id==="F2"){ onOpenDetail("bones-scales"); } else { setSel(f); setExp(false); } }}
               onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
               style={{ border:`1px solid ${hov?"rgba(196,166,110,0.5)":C.border}`, cursor:"pointer", padding:"2rem",
                 background:hov?"rgba(166,132,75,0.045)":"rgba(21,21,21,0.018)", transition:"all .3s", transform:hov?"translateY(-4px)":"none" }}>
@@ -503,7 +504,7 @@ function FacadeDesigns({ onOpenDetail }) {
               {f.layers.length > 0 && (
                 <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>{f.layers.length} Layers</p>
               )}
-              {f.id==="F1" && (
+              {(f.id==="F1" || f.id==="F2") && (
                 <p style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", color:C.gold, textTransform:"uppercase", margin:0 }}>3D Interactive</p>
               )}
             </div>
@@ -716,6 +717,11 @@ export default function App() {
         {detailViewer==="corita" && (
           <div style={{ position:"fixed", inset:0, zIndex:80 }}>
             <CoritaDetailViewer onClose={closeDetailViewer}/>
+          </div>
+        )}
+        {detailViewer==="bones-scales" && (
+          <div style={{ position:"fixed", inset:0, zIndex:80 }}>
+            <BonesScalesDetailViewer onClose={closeDetailViewer}/>
           </div>
         )}
         <ChatWidget/>

@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .tmp-chrome-profile/
+*.glbbak
 
 # Editor directories and files
 .vscode/*
