@@ -84,54 +84,17 @@ body {
   z-index: 2;
 }
 
-.hero-facade-fallback {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 900ms ease;
-}
-
-.hero-facade-background.is-webgl-loaded .hero-facade-fallback {
-  opacity: 0.025;
-}
-
-.hero-facade-fallback-model {
-  position: absolute;
-  top: 31%;
-  width: min(34vw, 430px);
-  max-height: 54vh;
-  object-fit: contain;
-  opacity: 0.42;
-  filter: saturate(0.92) contrast(1.1);
-  transform:
-    translateY(-50%)
-    perspective(900px)
-    rotateX(var(--fallback-rotate-x, 0deg))
-    rotateY(var(--fallback-rotate-y, 0deg));
-  transition: transform 120ms ease-out;
-  transform-origin: center;
-}
-
-.hero-facade-fallback-model-left {
-  top: 30%;
-  left: 15%;
-}
-
-.hero-facade-fallback-model-right {
-  right: 15%;
-  width: min(30.6vw, 387px);
-}
-
 .home-hero-haze {
   position: absolute;
-  inset: 18% 18% 34%;
+  inset: 9% 8% 14%;
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 28% 22% at 50% 46%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06) 58%, transparent 78%);
-  backdrop-filter: blur(0.25px);
+    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.04) 13%, rgba(255, 255, 255, 0.068) 50%, rgba(255, 255, 255, 0.04) 87%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.044) 16%, rgba(255, 255, 255, 0.064) 50%, rgba(255, 255, 255, 0.044) 84%, transparent 100%);
+  -webkit-backdrop-filter: blur(3px) saturate(0.84);
+  backdrop-filter: blur(3px) saturate(0.84);
+  mask-image: radial-gradient(ellipse 72% 62% at 50% 49%, #000 48%, rgba(0, 0, 0, 0.72) 68%, rgba(0, 0, 0, 0.18) 88%, transparent 100%);
 }
 
 @media (max-width: 760px) {
@@ -142,23 +105,11 @@ body {
     mask-image: radial-gradient(ellipse 86% 56% at 50% 43%, #000 50%, rgba(0, 0, 0, 0.42) 72%, transparent 100%);
   }
 
-  .hero-facade-fallback-model {
-    top: 28%;
-    width: min(44vw, 300px);
-    opacity: 0.26;
-  }
-
-  .hero-facade-fallback-model-left {
-    left: 5%;
-  }
-
-  .hero-facade-fallback-model-right {
-    right: 5%;
-    width: min(39.6vw, 270px);
-  }
-
   .home-hero-haze {
-    inset: 18% 0 26%;
+    inset: 10% 0 14%;
+    -webkit-backdrop-filter: blur(2.4px) saturate(0.84);
+    backdrop-filter: blur(2.4px) saturate(0.84);
+    mask-image: radial-gradient(ellipse 92% 62% at 50% 49%, #000 46%, rgba(0, 0, 0, 0.68) 68%, rgba(0, 0, 0, 0.16) 88%, transparent 100%);
   }
 }
 

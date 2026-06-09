@@ -492,15 +492,11 @@ export default function HeroFacadeBackground() {
     const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
     stateRef.current.pointer.x = x;
     stateRef.current.pointer.y = y;
-    mountRef.current.style.setProperty("--fallback-rotate-y", `${(x * 7).toFixed(2)}deg`);
-    mountRef.current.style.setProperty("--fallback-rotate-x", `${(-y * 4).toFixed(2)}deg`);
   };
 
   const resetPointer = () => {
     stateRef.current.pointer.x = 0;
     stateRef.current.pointer.y = 0;
-    mountRef.current.style.setProperty("--fallback-rotate-y", "0deg");
-    mountRef.current.style.setProperty("--fallback-rotate-x", "0deg");
   };
 
   return (
@@ -510,11 +506,6 @@ export default function HeroFacadeBackground() {
       onPointerMove={updatePointer}
       onPointerLeave={resetPointer}
       aria-hidden="true"
-    >
-      <div className="hero-facade-fallback">
-        <img className="hero-facade-fallback-model hero-facade-fallback-model-left" src="/images/coritafacade.png" alt="" />
-        <img className="hero-facade-fallback-model hero-facade-fallback-model-right" src="/images/bonesandscales.png" alt="" />
-      </div>
-    </div>
+    />
   );
 }
