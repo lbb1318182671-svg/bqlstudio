@@ -24,6 +24,8 @@ const C = {
   border:  "rgba(21,21,21,0.14)",
 };
 const F = { display:"'Jost', sans-serif", ui:"'Jost', sans-serif" };
+const IMAGE_VERSION = "20260610-3";
+const assetSrc = src => src ? `${src}${src.includes("?") ? "&" : "?"}v=${IMAGE_VERSION}` : src;
 
 const PROJECTS = [
   { id:"01", title:"The Enfolding", subtitle:"Corita Kent Art Center",
@@ -45,7 +47,7 @@ const PROJECTS = [
     images:["/images/03/1.jpg","/images/03/2.jpg","/images/03/3.jpg","/images/03/4.jpg","/images/03/5.jpg","/images/03/6.jpg","/images/03/7.jpg","/images/03/8.jpg","/images/03/9.jpg","/images/03/10.jpg"],
     captions:["","","","","","","","","",""] },
   { id:"04", title:"Co-Individual Housing", subtitle:"Co-living from Minimal Dwelling",
-    type:"Residential", year:"Fall 2023", tag:"Individual", location:"Los Angeles, CA", hasFacade:false,
+    type:"AFFORDABLE MULTI-FAMILY RESIDENTIAL", year:"Fall 2023", tag:"Individual", location:"Los Angeles, CA", hasFacade:false,
     brief:"Starting from the minimal dwelling unit, the project builds upward toward a co-living model that preserves individual autonomy while creating meaningful shared spaces. Aggregation strategies allow flexible density responses.",
     cover:"/images/04/cover.jpg",
     images:["/images/04/1.jpg","/images/04/2.jpg","/images/04/3.jpg","/images/04/4.jpg","/images/04/5.jpg","/images/04/6.jpg","/images/04/7.jpg","/images/04/8.jpg"],
@@ -54,20 +56,20 @@ const PROJECTS = [
     type:"Church — Competition", year:"Fall 2025", tag:"Team competition", location:"Altadena, CA", hasFacade:false,
     brief:"A community church conceived as an act of spiritual ascent. The structure rises from the earth through a series of compressed and expanding volumes, culminating in a luminous sanctuary that anchors the post-fire Altadena community.",
     cover:"/images/05/cover.jpg",
-    images:["/images/05/1.jpg","/images/05/2.jpg","/images/05/3.jpg","/images/05/4.jpg","/images/05/5.jpg"],
-    captions:["","","","",""] },
-  { id:"06", title:"BIM Modeling", subtitle:"Revit Sample",
+    images:["/images/05/1.jpg","/images/05/2.jpg","/images/05/3.jpg","/images/05/4.jpg","/images/05/5.jpg","/images/05/6.jpg"],
+    captions:["","","","","",""] },
+  { id:"06", title:"BIM and Professional Sample", subtitle:"Revit Sample",
     type:"BIM / Documentation", year:"2023–2024", tag:"Professional", location:"Los Angeles, CA", hasFacade:false,
     brief:"A professional BIM documentation sample demonstrating coordination across architectural, structural, and MEP systems. Developed to industry standards with detailed construction documentation and clash detection.",
     cover:"/images/06/cover.jpg",
-    images:["/images/06/1.jpg","/images/06/2.jpg","/images/06/3.jpg","/images/06/4.jpg"],
-    captions:["","","","Professional Sample"] },
+    images:["/images/06/1.jpg","/images/06/2.jpg","/images/06/3.jpg","/images/06/4.jpg","/images/06/5.jpg","/images/06/6.jpg"],
+    captions:["","","","","","Professional Sample"] },
   { id:"07", title:"Model Collection", subtitle:"Fabrication & Physical Models",
     type:"Fabrication", year:"Spring 2025", tag:"Collection", location:"Los Angeles, CA", hasFacade:false,
     brief:"A curated collection of physical models produced across multiple studio projects. Techniques include laser cutting, hand fabrication, and 3D printing, reflecting the development of spatial thinking through making.",
     cover:"/images/07/cover.jpg",
-    images:["/images/07/1.jpg","/images/07/2.jpg"],
-    captions:["",""] },
+    images:["/images/07/1.jpg","/images/07/2.jpg","/images/07/3.jpg"],
+    captions:["","",""] },
   { id:"08", title:"New Urban Model", subtitle:"Aging Population",
     type:"Academic Thesis Project", year:"Fall 2024 + Spring 2025", tag:"Individual", location:"Los Angeles, CA", hasFacade:false,
     brief:"An urban design thesis investigating new models of community infrastructure for aging populations. The project proposes a distributed network of care-integrated housing and public space across Los Angeles.",
@@ -76,13 +78,15 @@ const PROJECTS = [
     captions:["","","","","","",".",""] },
 ];
 
-const WORK_SAMPLE_PROJECTS = PROJECTS.filter(project => project.id !== "08");
+const WORK_SAMPLE_PROJECTS = [
+  ...PROJECTS.filter(project => project.id === "06"),
+  ...PROJECTS.filter(project => project.id !== "06" && project.id !== "08"),
+];
 
 const FACADES = [
   { id:"F1", title:"The Enfolding — Facade Detail", cover:"/images/coritafacade.png", layers:[] },
   { id:"F2", title:"The Bones and Scales — Facade Detail", cover:"/images/bonesandscales.png", layers:[] },
   { id:"F3", title:"Green Facade \u2014 Facade Detail", cover:"/images/greenfacade.png", layers:[] },
-  { id:"F4", title:"Folded Metal Skin", layers:["Folded Zinc Panel","Sub-Frame Bracket","Thermal Break","Air Barrier","Structural Steel Frame","Interior Lining"] },
 ];
 
 function Rule({ style }) {
@@ -253,7 +257,7 @@ function ProjectViewer({ project, onSwitchProject, onNavigate, onOpenDetail }) {
           justifyContent:"center",
           padding:"0 clamp(2.5rem,7vw,5.5rem)" }}>
           {project.images[idx] ? (
-            <img src={project.images[idx]} alt={`${project.title} — slide ${idx+1}`}
+            <img src={assetSrc(project.images[idx])} alt={`${project.title} — slide ${idx+1}`}
               style={{ maxWidth:"100%", height:"100%", maxHeight:"100%",
                 objectFit:"contain", display:"block" }}/>
           ) : (
@@ -433,6 +437,7 @@ function WorkSamples({ onOpenProject, onNavigate, onOpenDetail }) {
 
 function ProjectCard({ project, onOpen, onFacade }) {
   const [hov,setHov] = useState(false);
+  const hideCardMeta = project.id === "06";
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} onClick={onOpen}
       style={{ border:`1px solid ${hov?"rgba(196,166,110,0.48)":C.border}`, transition:"all .3s",
@@ -440,7 +445,7 @@ function ProjectCard({ project, onOpen, onFacade }) {
       <div style={{ aspectRatio:"4/3", background:"rgba(21,21,21,0.035)", display:"flex",
         alignItems:"center", justifyContent:"center", position:"relative", overflow:"hidden" }}>
         {(project.cover || project.images[0])
-          ? <img src={project.cover || project.images[0]} alt={project.title} style={{ width:"100%",height:"100%",objectFit:"cover" }}/>
+          ? <img src={assetSrc(project.cover || project.images[0])} alt={project.title} style={{ width:"100%",height:"100%",objectFit:"cover" }}/>
           : <>
               <span style={{ fontFamily:F.display, fontSize:"3.5rem", color:"rgba(196,166,110,0.07)", fontWeight:300, userSelect:"none" }}>{project.id}</span>
               <div style={{ position:"absolute",inset:0, background:"radial-gradient(circle at 30% 60%, rgba(196,166,110,0.04),transparent 70%)" }}/>
@@ -450,9 +455,13 @@ function ProjectCard({ project, onOpen, onFacade }) {
       <div style={{ padding:"1.2rem 1.5rem" }}>
         <div style={{ display:"flex",justifyContent:"space-between",alignItems:"baseline" }}>
           <h3 style={{ fontFamily:F.display, fontSize:"1.05rem", fontWeight:300, color:C.text, margin:0 }}>{project.title}</h3>
-          <span style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.1em", color:"rgba(21,21,21,0.34)" }}>{project.year}</span>
+          {!hideCardMeta && (
+            <span style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.1em", color:"rgba(21,21,21,0.34)" }}>{project.year}</span>
+          )}
         </div>
-        <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.83rem", color:C.textDim, margin:"0.22rem 0 0.55rem", textAlign:"left" }}>{project.subtitle}</p>
+        {!hideCardMeta && (
+          <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.83rem", color:C.textDim, margin:"0.22rem 0 0.55rem", textAlign:"left" }}>{project.subtitle}</p>
+        )}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <span style={{ fontFamily:F.ui, fontSize:"0.6rem", letterSpacing:"0.16em", textTransform:"uppercase", color:C.gold }}>{project.type}</span>
           {project.hasFacade && (
@@ -495,7 +504,7 @@ function FacadeDesignCard({ facade, onOpenDetail, onSelect }) {
       <div style={{ aspectRatio:"3/2", marginBottom:"1.5rem", background:"rgba(21,21,21,0.035)",
         position:"relative", overflow:"hidden", display:"flex",alignItems:"center",justifyContent:"center" }}>
         {facade.cover ? (
-          <img src={facade.cover} alt={facade.title} style={{
+          <img src={assetSrc(facade.cover)} alt={facade.title} style={{
             width:"100%", height:"100%", objectFit:"cover", display:"block",
             transform:hov?"scale(1.025)":"scale(1)", transition:"transform .35s ease"
           }}/>
@@ -585,7 +594,7 @@ function MasonryPhoto({ photo }) {
         background:"rgba(21,21,21,0.035)",
         outline: hov ? `1px solid rgba(196,166,110,0.4)` : "1px solid transparent",
         transition:"outline .25s" }}>
-      <img src={photo.src} alt={photo.alt} onLoad={()=>setLoaded(true)}
+      <img src={assetSrc(photo.src)} alt={photo.alt} onLoad={()=>setLoaded(true)}
         style={{ width:"100%", height:"auto", display:"block",
           opacity: loaded ? 1 : 0,
           transform: hov ? "scale(1.02)" : "scale(1)",
@@ -640,36 +649,57 @@ function Photography() {
 }
 
 function Contact() {
+  const [resumeLoaded, setResumeLoaded] = useState(false);
+  const [resumeMissing, setResumeMissing] = useState(false);
+  const contactCards = [
+    { label:"Professional", note:"Architecture employers & studios",
+      links:[{ text:"bqli9905@gmail.com", href:"mailto:bqli9905@gmail.com" },{ text:"LinkedIn", href:"https://www.linkedin.com/in/bingqingl" }]},
+    { label:"Studio", note:"Commercial photography & other business enquiries",
+      links:[{ text:"contact@bqlstudio.com", href:"mailto:contact@bqlstudio.com" }]},
+  ];
+
   return (
     <div style={{ minHeight:"100vh", padding:"clamp(2rem,8vw,6rem)", paddingTop:100,
-      display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
-      <SectionHeader label="04" title="Contact"/>
-      <div style={{ height:"clamp(2rem,6vw,4rem)" }}/>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(min(100%,270px),1fr))", gap:"clamp(1rem,3vw,2.5rem)", maxWidth:680, width:"100%" }}>
-        {[
-          { label:"Professional", note:"Architecture employers & studios",
-            links:[{ text:"bqli9905@gmail.com", href:"mailto:bqli9905@gmail.com" },{ text:"LinkedIn", href:"https://www.linkedin.com/in/bingqingl" }]},
-          { label:"Studio", note:"Commercial photography & other business enquiries",
-            links:[{ text:"contact@bqlstudio.com", href:"mailto:contact@bqlstudio.com" }]},
-        ].map(card=>(
-          <div key={card.label} style={{ padding:"2rem", border:`1px solid ${C.border}`, background:"rgba(21,21,21,0.018)", textAlign:"center" }}>
-            <p style={{ fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", color:C.gold, margin:"0 0 0.55rem" }}>{card.label}</p>
-            <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"0.88rem", color:C.textDim, margin:"0 0 1.5rem" }}>{card.note}</p>
-            <Rule/>
-            <div style={{ marginTop:"1.5rem", display:"flex", flexDirection:"column", gap:"0.7rem", alignItems:"center" }}>
-              {card.links.map(l=>(
-                <a key={l.text} href={l.href} target="_blank" rel="noopener noreferrer"
-                  style={{ fontFamily:F.ui, fontSize:"0.86rem", letterSpacing:"0.05em", color:C.text, textDecoration:"none",
-                    borderBottom:`1px solid rgba(196,166,110,0.26)`, paddingBottom:2,
-                    transition:"color .2s, border-color .2s", display:"inline-block" }}
-                  onMouseEnter={e=>{ e.currentTarget.style.color=C.gold; e.currentTarget.style.borderColor=C.gold; }}
-                  onMouseLeave={e=>{ e.currentTarget.style.color=C.text; e.currentTarget.style.borderColor="rgba(196,166,110,0.26)"; }}>
-                  {l.text}
-                </a>
-              ))}
-            </div>
+      display:"flex", flexDirection:"column", justifyContent:"center" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"minmax(220px, 1fr) minmax(0, 3fr)", gap:"clamp(1.5rem,4vw,3.5rem)", alignItems:"stretch" }}>
+        <div style={{ minHeight:"min(72vh, 900px)", display:"flex", flexDirection:"column" }}>
+          <SectionHeader label="04" title="Contact"/>
+          <div style={{ height:"clamp(1.5rem,4vw,2.5rem)" }}/>
+          <div style={{ display:"flex", flexDirection:"column", gap:"1rem", flex:1 }}>
+            {contactCards.map(card=>(
+              <div key={card.label} style={{ flex:1, padding:"clamp(1.5rem,3vw,2.25rem) 0", borderTop:`1px solid ${C.border}`, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", textAlign:"center" }}>
+                <p style={{ fontFamily:F.ui, fontSize:"clamp(0.66rem,0.9vw,0.78rem)", letterSpacing:"0.22em", textTransform:"uppercase", color:C.gold, margin:"0 0 0.65rem" }}>{card.label}</p>
+                <p style={{ fontFamily:F.display, fontStyle:"italic", fontSize:"clamp(0.9rem,1.1vw,1rem)", color:C.textDim, margin:"0 0 1.1rem", lineHeight:1.65 }}>{card.note}</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:"0.55rem", alignItems:"center" }}>
+                  {card.links.map(l=>(
+                    <a key={l.text} href={l.href} target="_blank" rel="noopener noreferrer"
+                      style={{ fontFamily:F.ui, fontSize:"clamp(0.84rem,1vw,0.95rem)", letterSpacing:"0.05em", color:C.text, textDecoration:"none",
+                        borderBottom:`1px solid rgba(196,166,110,0.26)`, paddingBottom:2,
+                        transition:"color .2s, border-color .2s", display:"inline-block" }}
+                      onMouseEnter={e=>{ e.currentTarget.style.color=C.gold; e.currentTarget.style.borderColor=C.gold; }}
+                      onMouseLeave={e=>{ e.currentTarget.style.color=C.text; e.currentTarget.style.borderColor="rgba(196,166,110,0.26)"; }}>
+                      {l.text}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div style={{ minHeight:"min(72vh, 900px)", border:`1px solid ${C.border}`, background:"rgba(21,21,21,0.018)", display:"flex", alignItems:"center", justifyContent:"center", overflow:"hidden", position:"relative" }}>
+          <img
+            src={assetSrc("/images/ABOUTME.jpg")}
+            alt="Resume"
+            style={{ width:"100%", height:"100%", objectFit:"contain", display:resumeMissing ? "none" : "block", opacity:resumeLoaded ? 1 : 0, transition:"opacity .35s ease" }}
+            onLoad={()=>setResumeLoaded(true)}
+            onError={()=>setResumeMissing(true)}
+          />
+          {(!resumeLoaded || resumeMissing) && (
+            <span style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:F.ui, fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"rgba(196,166,110,0.34)" }}>
+              Resume JPG
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
