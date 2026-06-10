@@ -9,23 +9,23 @@ const HERO_MODELS = [
   {
     id: "corita",
     url: "/models/coritaexplodefacade.glb",
-    position: [-2.35, 0.22, 0],
+    position: [-2.35, 0.57, 0],
     frontCorrection: [0, Math.PI / 2, 0],
-    targetHeight: 2.42,
+    targetHeight: 2.66,
   },
   {
     id: "bones-scales",
     url: BONES_AND_SCALES_MODEL_URL,
-    position: [0, 0.02, 0],
+    position: [0, 0.37, 0],
     frontCorrection: [0, 0, 0],
     targetHeight: 1.87,
   },
   {
     id: "green-facade",
     url: GREEN_FACADE_MODEL_URL,
-    position: [2.35, 0.02, 0],
+    position: [2.35, 0.37, 0],
     frontCorrection: [0, 0, 0],
-    targetHeight: 1.88,
+    targetHeight: 2.26,
   },
 ];
 
