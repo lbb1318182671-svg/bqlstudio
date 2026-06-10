@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import CoritaDetailViewer from "./CoritaDetailViewer";
 import BonesScalesDetailViewer from "./BonesScalesDetailViewer";
+import GreenFacadeDetailViewer from "./GreenFacadeDetailViewer";
 import HeroFacadeBackground from "./HeroFacadeBackground";
 
 const FONT_IMPORT = `
@@ -75,10 +76,12 @@ const PROJECTS = [
     captions:["","","","","","",".",""] },
 ];
 
+const WORK_SAMPLE_PROJECTS = PROJECTS.filter(project => project.id !== "08");
+
 const FACADES = [
   { id:"F1", title:"The Enfolding — Facade Detail", cover:"/images/coritafacade.png", layers:[] },
   { id:"F2", title:"The Bones and Scales — Facade Detail", cover:"/images/bonesandscales.png", layers:[] },
-  { id:"F3", title:"/", layers:["Facing Brick (100mm)","Open Cavity","Stainless Steel Ties","Breather Membrane","Rigid Insulation","Structural Frame"] },
+  { id:"F3", title:"Green Facade \u2014 Facade Detail", cover:"/images/greenfacade.png", layers:[] },
   { id:"F4", title:"Folded Metal Skin", layers:["Folded Zinc Panel","Sub-Frame Bracket","Thermal Break","Air Barrier","Structural Steel Frame","Interior Lining"] },
 ];
 
@@ -180,7 +183,7 @@ function ProjectIndexSidebar({ currentProject, onSwitchProject, top=58 }) {
       width:"clamp(48px,5.5vw,64px)", display:"flex", flexDirection:"column",
       alignItems:"center", justifyContent:"center", gap:"clamp(0.6rem,1.2vh,1rem)",
       borderRight:`1px solid ${C.border}`, background:"rgba(255,255,255,0.86)", padding:"1.5rem 0" }}>
-      {PROJECTS.map(p => {
+      {WORK_SAMPLE_PROJECTS.map(p => {
         const isCurrent = p.id === currentProject.id;
         return <ProjectIndexItem key={p.id} project={p} isCurrent={isCurrent} onSwitch={()=>onSwitchProject(p)}/>;
       })}
@@ -230,9 +233,9 @@ function ProjectViewer({ project, onSwitchProject, onNavigate, onOpenDetail }) {
   },[prev,next]);
 
   const swipe = useSwipe(next, prev);
-  const pi = PROJECTS.findIndex(p=>p.id===project.id);
-  const prevP = PROJECTS[pi-1]??null;
-  const nextP = PROJECTS[pi+1]??null;
+  const pi = WORK_SAMPLE_PROJECTS.findIndex(p=>p.id===project.id);
+  const prevP = WORK_SAMPLE_PROJECTS[pi-1]??null;
+  const nextP = WORK_SAMPLE_PROJECTS[pi+1]??null;
 
   const SB = "clamp(48px,5.5vw,64px)";
   const BH = "clamp(118px,18vh,148px)";
@@ -415,7 +418,7 @@ function WorkSamples({ onOpenProject, onNavigate, onOpenDetail }) {
       <SectionHeader label="01" title="Work Samples"/>
       <div style={{ height:"clamp(2rem,5vw,3.5rem)" }}/>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(min(100%,300px),1fr))", gap:"clamp(1rem,3vw,2rem)" }}>
-        {PROJECTS.map(p=>(
+        {WORK_SAMPLE_PROJECTS.map(p=>(
           <ProjectCard
             key={p.id}
             project={p}
@@ -476,6 +479,8 @@ function FacadeDesignCard({ facade, onOpenDetail, onSelect }) {
       onOpenDetail("corita");
     } else if(facade.id==="F2"){
       onOpenDetail("bones-scales");
+    } else if(facade.id==="F3"){
+      onOpenDetail("green-facade");
     } else {
       onSelect(facade);
     }
@@ -509,7 +514,7 @@ function FacadeDesignCard({ facade, onOpenDetail, onSelect }) {
       {facade.layers.length > 0 && (
         <p style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.18em", color:C.gold, textTransform:"uppercase", margin:0 }}>{facade.layers.length} Layers</p>
       )}
-      {(facade.id==="F1" || facade.id==="F2") && (
+      {(facade.id==="F1" || facade.id==="F2" || facade.id==="F3") && (
         <p style={{ fontFamily:F.ui, fontSize:"0.72rem", letterSpacing:"0.18em", color:C.gold, textTransform:"uppercase", margin:0 }}>3D Interactive</p>
       )}
     </div>
@@ -748,6 +753,11 @@ export default function App() {
         {detailViewer==="bones-scales" && (
           <div style={{ position:"fixed", inset:0, zIndex:80 }}>
             <BonesScalesDetailViewer onClose={closeDetailViewer}/>
+          </div>
+        )}
+        {detailViewer==="green-facade" && (
+          <div style={{ position:"fixed", inset:0, zIndex:80 }}>
+            <GreenFacadeDetailViewer onClose={closeDetailViewer}/>
           </div>
         )}
         <ChatWidget/>

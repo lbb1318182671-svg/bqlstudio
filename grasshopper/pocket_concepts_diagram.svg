@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860">
+  <defs>
+    <style>
+      .bg { fill: #fbfaf7; }
+      .panel { fill: #ffffff; stroke: #d8d2c8; stroke-width: 1.5; }
+      .title { font: 600 24px Arial, "Microsoft YaHei", sans-serif; fill: #242424; }
+      .label { font: 16px Arial, "Microsoft YaHei", sans-serif; fill: #343434; }
+      .small { font: 13px Arial, "Microsoft YaHei", sans-serif; fill: #575757; }
+      .line { fill: none; stroke: #222; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { fill: none; stroke: #555; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+      .dash { fill: none; stroke: #777; stroke-width: 1.2; stroke-dasharray: 6 5; }
+      .glass { fill: #d9e8f6; stroke: #1e3957; stroke-width: 2; opacity: 0.72; }
+      .mesh { fill: none; stroke: #555; stroke-width: 1.6; opacity: 0.8; }
+      .precast { fill: #cdbda9; stroke: #4a4036; stroke-width: 2.2; opacity: 0.9; }
+      .precast2 { fill: #bca991; stroke: #4a4036; stroke-width: 2.2; opacity: 0.82; }
+      .soil { fill: #5b3f2c; stroke: #2c1e15; stroke-width: 1.4; opacity: 0.9; }
+      .plant { fill: none; stroke: #4f8b4a; stroke-width: 2.3; stroke-linecap: round; }
+      .bracket { fill: #777; stroke: #333; stroke-width: 1.5; }
+      .water { fill: none; stroke: #6ca3c7; stroke-width: 2; stroke-linecap: round; }
+      .note { fill: #fff8e6; stroke: #c7a76c; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="860"/>
+  <text class="title" x="56" y="54">Organic precast planter pocket concepts</text>
+  <text class="small" x="56" y="80">目标：不是椭圆泡泡，而是贴在外层 facade/mesh 上、上口打开、能放土和植物的真实 pocket form。</text>
+
+  <!-- Panel A -->
+  <rect class="panel" x="50" y="115" width="400" height="690" rx="10"/>
+  <text class="title" x="78" y="158">A. 单个 scooped pocket</text>
+  <text class="small" x="78" y="184">一个 pocket = 一个预制混凝土兜，适合清楚表达构造。</text>
+
+  <!-- A elevation -->
+  <text class="label" x="78" y="225">正面</text>
+  <rect class="glass" x="115" y="250" width="265" height="230"/>
+  <line class="mesh" x1="115" y1="250" x2="380" y2="480"/>
+  <line class="mesh" x1="380" y1="250" x2="115" y2="480"/>
+  <line class="mesh" x1="180" y1="250" x2="180" y2="480"/>
+  <line class="mesh" x1="245" y1="250" x2="245" y2="480"/>
+  <line class="mesh" x1="310" y1="250" x2="310" y2="480"/>
+  <path class="precast" d="M 150 370
+    C 150 300, 205 280, 252 292
+    C 322 309, 360 355, 342 418
+    C 326 474, 245 493, 188 455
+    C 162 438, 148 407, 150 370 Z"/>
+  <path class="soil" d="M 187 365 C 225 342, 292 344, 325 375 C 284 392, 232 393, 187 365 Z"/>
+  <path class="plant" d="M240 360 C228 330,225 305,210 286"/>
+  <path class="plant" d="M250 360 C258 326,277 306,301 286"/>
+  <path class="plant" d="M262 360 C260 334,247 310,249 286"/>
+  <text class="small" x="140" y="505">外轮廓大小可以参数化</text>
+
+  <!-- A section -->
+  <text class="label" x="78" y="565">剖面</text>
+  <line class="line" x1="190" y1="590" x2="190" y2="740"/>
+  <text class="small" x="118" y="584">facade plane</text>
+  <rect class="glass" x="160" y="602" width="25" height="118"/>
+  <rect class="bracket" x="190" y="650" width="54" height="14"/>
+  <path class="precast" d="M190 628
+    C222 636, 268 648, 306 688
+    C318 702, 319 725, 297 733
+    L198 733
+    C190 716, 188 665, 190 628 Z"/>
+  <path class="soil" d="M213 681 C242 668, 282 674, 304 695 C273 706, 235 705, 213 681 Z"/>
+  <path class="water" d="M220 728 L285 728"/>
+  <text class="small" x="310" y="692">前唇上翘</text>
+  <text class="small" x="310" y="725">底部排水层</text>
+
+  <!-- Panel B -->
+  <rect class="panel" x="500" y="115" width="400" height="690" rx="10"/>
+  <text class="title" x="528" y="158">B. 错位 petal pocket field</text>
+  <text class="small" x="528" y="184">最推荐：大小渐变、错位排布，但每个仍是真实开口兜。</text>
+
+  <!-- B elevation -->
+  <text class="label" x="528" y="225">正面</text>
+  <rect class="glass" x="555" y="250" width="290" height="260"/>
+  <g class="mesh">
+    <line x1="555" y1="250" x2="845" y2="510"/>
+    <line x1="845" y1="250" x2="555" y2="510"/>
+    <line x1="628" y1="250" x2="628" y2="510"/>
+    <line x1="700" y1="250" x2="700" y2="510"/>
+    <line x1="773" y1="250" x2="773" y2="510"/>
+    <line x1="555" y1="315" x2="845" y2="315"/>
+    <line x1="555" y1="380" x2="845" y2="380"/>
+    <line x1="555" y1="445" x2="845" y2="445"/>
+  </g>
+  <path class="precast" d="M575 330 C592 280, 646 276, 672 318 C682 360, 638 395, 594 378 C579 366, 572 349, 575 330 Z"/>
+  <path class="precast2" d="M675 300 C701 254, 770 270, 789 322 C803 378, 740 414, 692 386 C672 365, 665 327, 675 300 Z"/>
+  <path class="precast" d="M760 360 C782 316, 839 330, 857 382 C866 425, 827 462, 782 444 C762 426, 748 391, 760 360 Z"/>
+  <path class="precast2" d="M610 430 C635 390, 696 405, 711 456 C721 499, 671 532, 625 511 C607 493, 599 456, 610 430 Z"/>
+  <path class="precast" d="M710 426 C738 379, 820 394, 840 458 C852 513, 782 548, 731 518 C710 495, 700 456, 710 426 Z"/>
+  <path class="soil" d="M596 326 C617 315, 648 318, 665 336 C642 344, 618 344, 596 326 Z"/>
+  <path class="soil" d="M699 304 C728 290, 766 298, 784 326 C754 336, 724 333, 699 304 Z"/>
+  <path class="soil" d="M632 430 C658 418, 690 424, 705 454 C677 463, 650 456, 632 430 Z"/>
+  <path class="plant" d="M625 320 C610 285, 598 266, 575 250"/>
+  <path class="plant" d="M743 300 C752 270, 780 246, 812 236"/>
+  <path class="plant" d="M672 430 C660 400, 660 374, 648 350"/>
+  <path class="plant" d="M777 425 C805 390, 831 366, 852 338"/>
+
+  <!-- B section -->
+  <text class="label" x="528" y="565">单个 pocket 剖面逻辑</text>
+  <line class="line" x1="640" y1="590" x2="640" y2="740"/>
+  <rect class="glass" x="610" y="602" width="25" height="118"/>
+  <rect class="bracket" x="640" y="646" width="46" height="12"/>
+  <rect class="bracket" x="640" y="700" width="36" height="10"/>
+  <path class="precast" d="M640 620
+    C680 625, 740 642, 780 690
+    C795 710, 785 742, 750 748
+    C710 753, 672 742, 646 728
+    C640 694, 637 650, 640 620 Z"/>
+  <path class="soil" d="M668 682 C704 666, 754 674, 780 696 C743 710, 699 704, 668 682 Z"/>
+  <path class="plant" d="M715 680 C704 648, 692 622, 670 604"/>
+  <path class="plant" d="M728 680 C747 645, 770 621, 805 602"/>
+  <text class="small" x="680" y="618">开口 rim</text>
+  <text class="small" x="688" y="663">hidden bracket</text>
+  <text class="small" x="704" y="747">真正下沉的兜底</text>
+
+  <!-- Panel C -->
+  <rect class="panel" x="950" y="115" width="400" height="690" rx="10"/>
+  <text class="title" x="978" y="158">C. 连续 ribbon trough</text>
+  <text class="small" x="978" y="184">整体感最强，但预制分段、排水和维护更复杂。</text>
+
+  <!-- C elevation -->
+  <text class="label" x="978" y="225">正面</text>
+  <rect class="glass" x="990" y="250" width="320" height="250"/>
+  <g class="mesh">
+    <line x1="990" y1="250" x2="1310" y2="500"/>
+    <line x1="1310" y1="250" x2="990" y2="500"/>
+    <line x1="1070" y1="250" x2="1070" y2="500"/>
+    <line x1="1150" y1="250" x2="1150" y2="500"/>
+    <line x1="1230" y1="250" x2="1230" y2="500"/>
+  </g>
+  <path class="precast" d="M990 382
+    C1035 318, 1085 330, 1125 375
+    C1170 428, 1218 420, 1265 356
+    C1286 326, 1310 330, 1325 362
+    L1325 430
+    C1282 404, 1245 438, 1208 474
+    C1160 520, 1105 508, 1064 455
+    C1032 415, 1007 414, 990 442 Z"/>
+  <path class="soil" d="M1033 392 C1072 374, 1112 382, 1135 408 C1095 422, 1061 416, 1033 392 Z"/>
+  <path class="soil" d="M1194 420 C1230 398, 1282 402, 1310 430 C1268 444, 1227 440, 1194 420 Z"/>
+  <path class="plant" d="M1080 390 C1065 350, 1052 326, 1028 300"/>
+  <path class="plant" d="M1248 420 C1268 380, 1290 354, 1325 330"/>
+  <path class="dash" d="M990 384 C1035 320,1085 330,1125 375 C1170 428,1218 420,1265 356"/>
+  <text class="small" x="1015" y="526">连续模具感强，但不如单兜易维护</text>
+
+  <!-- C section -->
+  <text class="label" x="978" y="565">剖面</text>
+  <line class="line" x1="1090" y1="590" x2="1090" y2="740"/>
+  <rect class="glass" x="1060" y="602" width="25" height="118"/>
+  <rect class="bracket" x="1090" y="660" width="60" height="12"/>
+  <path class="precast" d="M1090 628
+    C1140 625, 1210 650, 1260 697
+    C1282 718, 1272 748, 1234 752
+    L1100 735
+    C1092 704, 1088 660, 1090 628 Z"/>
+  <path class="soil" d="M1122 688 C1165 670, 1220 676, 1255 702 C1210 716, 1164 708, 1122 688 Z"/>
+  <path class="water" d="M1110 733 C1150 742, 1200 747, 1238 744"/>
+  <text class="small" x="1190" y="620">连续前缘</text>
+  <text class="small" x="1195" y="744">线性排水槽</text>
+
+  <!-- bottom decision strip -->
+  <rect class="note" x="50" y="820" width="1300" height="28" rx="6"/>
+  <text class="small" x="70" y="839">建议下一版先做 B：开口 shell + soil mass + back plate。暂时不要 closed Brep；如果一定 closed，就只能当体量，不会像能种植物的兜。</text>
+</svg>

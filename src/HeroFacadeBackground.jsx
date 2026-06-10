@@ -3,22 +3,29 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { BONES_AND_SCALES_MODEL_URL } from "./modelUrls";
+import { BONES_AND_SCALES_MODEL_URL, GREEN_FACADE_MODEL_URL } from "./modelUrls";
 
 const HERO_MODELS = [
   {
     id: "corita",
     url: "/models/coritaexplodefacade.glb",
-    position: [-2.1, 0.22, 0],
+    position: [-2.35, 0.22, 0],
     frontCorrection: [0, Math.PI / 2, 0],
     targetHeight: 2.42,
   },
   {
     id: "bones-scales",
     url: BONES_AND_SCALES_MODEL_URL,
-    position: [2.0, 0.02, 0],
+    position: [0, 0.02, 0],
     frontCorrection: [0, 0, 0],
     targetHeight: 1.87,
+  },
+  {
+    id: "green-facade",
+    url: GREEN_FACADE_MODEL_URL,
+    position: [2.35, 0.02, 0],
+    frontCorrection: [0, 0, 0],
+    targetHeight: 1.88,
   },
 ];
 
@@ -262,6 +269,47 @@ function makeMaterialKit() {
       bracket: metalMat(0x3f4648, 0.48, 0.74),
       default: matte(0xd8d6cf, 0.78),
     },
+    green: {
+      green: matte(0x456e38, 0.78),
+      soil: texturedMatte(
+        makeTexture({ base: "#786343", accent: "#3f2d1d", seed: 829, repeat: [3, 3], count: 1800 }),
+        makeTexture({ base: "#9c9381", accent: "#4a4135", seed: 831, repeat: [3, 3], count: 1800, colorSpace: false }),
+        0.92,
+        0.026
+      ),
+      vaperbarrier: matte(0xdbd8cf, 0.82),
+      vaporbarrier: matte(0xdbd8cf, 0.82),
+      greenconcrete: texturedMatte(
+        makeTexture({ base: "#c6c7bf", accent: "#575b54", seed: 503, repeat: [6.2, 4.2], count: 3600, grain: true }),
+        makeTexture({ base: "#c9c9c4", accent: "#5c615a", seed: 505, repeat: [6.2, 4.2], count: 3600, grain: true, colorSpace: false }),
+        0.94,
+        0.036
+      ),
+      greenplateandhold: metalMat(0xb7b5aa, 0.22, 0.62),
+      hookandslot: metalMat(0x8e938e, 0.38, 0.52),
+      facadebracket: metalMat(0x8e938e, 0.38, 0.52),
+      handrill: metalMat(0x8e938e, 0.35, 0.5),
+      windowframe: metalMat(0x8e938e, 0.35, 0.5),
+      corridorslab: timber,
+      corridorbeam: timber,
+      buildingstructure: timber,
+      roof: timber,
+      corridorfinish: concreteMat,
+      floorfinish: concreteMat,
+      env1finish: plywoodMat,
+      insulandconnection: matte(0xe3d9ac, 0.86),
+      glazing: new THREE.MeshPhysicalMaterial({
+        color: 0xd8edf0,
+        roughness: 0.08,
+        metalness: 0,
+        transparent: true,
+        opacity: 0.42,
+        transmission: 0.28,
+        thickness: 0.08,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      }),
+    },
     fallbackPerforated: new THREE.MeshStandardMaterial({
       color: 0xaeb8ba,
       map: metal,
@@ -294,9 +342,12 @@ function applyHeroMaterials(model, kit) {
   model.traverse(node => {
     if (!node.isMesh) return;
     const layerName = node.parent?.name || node.name;
+    const normalizedLayerName = layerName.toLowerCase();
 
     if (kit.corita[layerName]) {
       node.material = cloneMaterial(kit.corita[layerName]);
+    } else if (kit.green[normalizedLayerName]) {
+      node.material = cloneMaterial(kit.green[normalizedLayerName]);
     } else if (layerName === "SCALE") {
       node.material = cloneMaterial(kit.bones.scale);
     } else if (layerName === "BONE1" || layerName === "BONE2") {
@@ -460,7 +511,7 @@ export default function HeroFacadeBackground() {
       const targetYaw = state.current.x * 0.18;
       const targetPitch = -state.current.y * 0.075;
       state.models.forEach((model, index) => {
-        model.rotation.y = targetYaw * (index === 0 ? 1 : 0.92);
+        model.rotation.y = targetYaw * (index === 0 ? 1 : index === 1 ? 0.92 : 0.96);
         model.rotation.x = targetPitch;
       });
 
